@@ -3,11 +3,13 @@ Created on 01/08/2015
 
 @author: oblivion
 '''
+from datetime import datetime
 from io import SEEK_END
 from socket import getfqdn
 import re
 
 from flask import render_template
+import psutil
 import requests
 
 from app import app
@@ -16,18 +18,19 @@ from app import app
 @app.route('/')
 @app.route('/index')
 def index():
-    # Get data from the lighttpd status addon
-    r = requests.get("http://" + getfqdn() + "/server-status?auto")
+    uptime = 0
+    active = 0
 
-    pattern = re.compile('(\w+:.)(\d+)')
-    entry_iter = pattern.finditer(r.text)
-    for match in entry_iter:
-        if (match.group(1).find("Uptime") != -1):
-            uptime = int(match.group(2))
-        elif (match.group(1).find("Accesses") != -1):
-            accesses = int(match.group(2))
-        elif (match.group(1).find("BusyServers") != -1):
-            active = int(match.group(2))
+    for process in psutil.process_iter():
+        if (process.name().find('lighttpd') != -1):
+            uptime = (datetime.now() - datetime.fromtimestamp(process.create_time()))
+    uptime = str(uptime).split('.')[0]
+
+    # Get connections on port 80
+    connections = psutil.net_connections('inet')
+    for connection in connections:
+        if (connection.laddr[1] == 80):
+            active += 1
 
     # Get latest remote address from access.log.
     lines = list()
@@ -39,9 +42,10 @@ def index():
     except PermissionError:
         lines.append("Permission denied reading server log file.")
 
-    line = lines[-1]
+    # Lighttpd has the  HTTP request host name as second field.
+    entries = lines[-1].split(' ')
+    # Set total requests
+    accesses = len(lines)
 
-    print(lines)
-
-    return render_template('index.html', title=getfqdn(), active=active, url=line,
+    return render_template('index.html', title=getfqdn(), active=active, url=entries[0],
                            uptime=uptime, accesses=accesses)
