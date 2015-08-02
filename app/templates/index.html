@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    	<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	    {% if title %}
+	    	<title>{{ title }} - server HUD</title>
+	    {% else %}
+	        <title>Unknown hostname - server HUD</title>
+	    {% endif %}
+	    <link href="/static/css/dashboard.css" rel="stylesheet">
+
+  	</head>
+	<body>
+		<div class="web-panel">
+			<div class="connections">
+	 			<div class="panel-heading">Active connections</div>
+				<div class="panel-body"><h1 class="text-center high">{{ active }}</h1></div>
+			</div>
+			<div class="url">
+				<div class="panel-heading">Latest URL</div>
+				<div class="panel-body"><h3 class="text-center">{{ url }}</h3></div>
+			</div>
+			<div class="uptime">
+				<div class="panel-heading">Uptime</div>
+				<div class="panel-body"><h3 class="text-center">{{ uptime }}</h3></div>
+			</div>
+			<div class="accesses">
+				<div class="panel-heading">Total accesses</div>
+				<div class="panel-body"><h3 class="text-center">{{ accesses }}</h3></div>
+			</div>
+		</div>
+	</body>
+</html>

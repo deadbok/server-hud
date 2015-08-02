@@ -1,0 +1,81 @@
+/*!
+ * Dashboard
+ * Copyright 2015 Martin Bo Kristensen Grønholdt
+ */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+	background: black;
+ 	color: white;
+}
+ 
+.connections {
+	border: 0.1em solid silver;
+	border-radius: 1em;
+ 	float: left;
+ 	margin: 0.5em;
+ 	width: 20%;
+}
+ 
+.url {
+	border: 0.1em solid silver;
+	border-radius: 1em;
+ 	float: left;
+ 	margin: 0.5em;
+ 	width: 75%;
+}
+
+.uptime {
+	border: 0.1em solid silver;
+	border-radius: 1em;
+ 	float: left;
+ 	margin: 0.5em;
+ 	width: 20%;
+}
+
+.accesses {
+	border: 0.1em solid silver;
+	border-radius: 1em;
+ 	float: left;
+ 	margin: 0.5em;
+ 	width: 30%;
+}
+
+.web-panel {
+    width: 100vw;
+    height: 33vh;
+}
+
+.web-panel:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.panel-heading {
+	background: #22262B;
+	font-weight: bold;
+	border-width: 0.1em;
+	border-color:silver;
+	border-style: none none solid none;
+	padding: 0.5em;
+	border-top-left-radius: 1em;
+	border-top-right-radius: 1em;
+}
+
+.panel-body {
+	padding: 0.5em;
+}
+
+.high {
+	font-size: 5em;
+	font-weight: bold;
+	/*font-family: sans-serif;*/
+}
