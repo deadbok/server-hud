@@ -18,10 +18,10 @@
 		<div class="web-panel">
 			<div class="connections">
 	 			<div class="panel-heading">Active connections</div>
-				<div class="panel-body"><h1 class="text-center high">{{ active }}</h1></div>
+				<div class="panel-body"><h1 class="text-center high" id="connections">{{ active }}</h1></div>
 			</div>
 			<div class="url">
-				<div class="panel-heading">Latest URL</div>
+				<div class="panel-heading">Latest remote address</div>
 				<div class="panel-body"><h3 class="text-center">{{ url }}</h3></div>
 			</div>
 			<div class="uptime">
@@ -29,9 +29,23 @@
 				<div class="panel-body"><h3 class="text-center">{{ uptime }}</h3></div>
 			</div>
 			<div class="accesses">
-				<div class="panel-heading">Total accesses</div>
+				<div class="panel-heading">Logged accesses</div>
 				<div class="panel-body"><h3 class="text-center">{{ accesses }}</h3></div>
 			</div>
 		</div>
+		<script src="static/js/atomic.js" type="text/javascript"></script>
+		<script type="text/javascript">
+var connections = document.getElementById("connections");
+
+atomic.get('/rest/connections', 'application/json')
+.success(function (data, xhr) 
+{
+	connections.innerHTML = data.connections;
+})
+.error(function (data, xhr) 
+{
+	connections.innerHTML = "Could not get data.";
+});
+		</script>
 	</body>
 </html>
