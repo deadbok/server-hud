@@ -4,6 +4,7 @@
 '''
 from datetime import datetime
 from socket import getfqdn
+import socket
 
 from flask import jsonify
 from flask import render_template
@@ -11,8 +12,8 @@ import psutil
 import requests
 
 from app import APP
-
 from app.log import logger
+
 
 AVG_RCV_SPEED = 0
 AVG_SEND_SPEED = 0
@@ -113,8 +114,15 @@ def remote_host():
         lines.append("Permission denied reading server log file.")
 
     logger.debug("Log line: " + lines[-1] + ".")
+    ip = lines[-1].split(' ')[0]
 
-    return jsonify(address=lines[-1].split(' ')[0])
+    if ip.startswith(':'):
+        ip = ip.split(':')[-1]
+    logger.debug("IP: " + ip + ".")
+    rhost = socket.gethostbyaddr(ip)
+    logger.debug("Host name from DNS: " + str(rhost) + ".")
+
+    return jsonify(address=rhost[0])
 
 
 @APP.route('/rest/accesses', methods=['GET'])
