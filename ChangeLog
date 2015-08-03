@@ -9,3 +9,4 @@
 	* app/views.py: PEP8 fixes.
 					Everything is RESTful.
 					Added logging.
+					Get speed from REST on firewall.
