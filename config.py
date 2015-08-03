@@ -3,6 +3,6 @@
 :author: oblivion
 '''
 # Network interface to use when calculating speed.
-INTERFACE = "enp4s0"
+INTERFACE = "eth1"
 #Debug logging.
 DEBUG = True

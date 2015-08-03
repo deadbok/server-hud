@@ -54,6 +54,8 @@ def rcv_speed():
         LAST_RCV_TIME = now
     except ZeroDivisionError:
         logger.warning("Sampling to fast, while sampling incoming speed.")
+    except KeyError:
+		logger.error("Interface not found.")
 
     return jsonify(speed="{0:.2f}".format(AVG_RCV_SPEED))
 
@@ -93,5 +95,8 @@ def send_speed():
         LAST_SEND_TIME = now
     except ZeroDivisionError:
         logger.warning("Sampling to fast, while sampling outgoing speed.")
+    except KeyError:
+		logger.error("Interface not found.")
+        
 
     return jsonify(speed="{0:.2f}".format(AVG_SEND_SPEED))
