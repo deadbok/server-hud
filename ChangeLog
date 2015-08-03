@@ -1,0 +1,11 @@
+2015-08-03  oblivion  <oblivion@case>
+
+	* app/__init__.py: Added logging.
+	* app/templates/index.html: Spelling.
+								Added configurable port.
+								Everything is RESTful.
+	* config.py: Added PORT.
+				 Added DEBUG.
+	* app/views.py: PEP8 fixes.
+					Everything is RESTful.
+					Added logging.

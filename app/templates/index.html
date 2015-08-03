@@ -11,90 +11,174 @@
 	        <title>Unknown hostname - server HUD</title>
 	    {% endif %}
 	    <link href="/static/css/dashboard.css" rel="stylesheet">
-	    <meta http-equiv="refresh" content="30">
   	</head>
 	<body>
-		<div class="header"><div class="text-center" id="clock">Server dashboard - {{ hostname }} - 00:00</div></div>
+		<div class="header"><div class="text-center" id="clock">Server dash board - {{ hostname }} - 00:00</div></div>
 		<div class="web-panel">
 			<div class="connections">
 	 			<div class="panel-heading">Active connections</div>
-				<div class="panel-body"><h1 class="text-center high" id="connections">{{ active }}</h1></div>
+				<div class="panel-body"><h1 class="text-center high" id="connections">0</h1></div>
 			</div>
 			<div class="url">
 				<div class="panel-heading">Latest remote address</div>
-				<div class="panel-body"><h3 class="text-center">{{ url }}</h3></div>
+				<div class="panel-body"><h3 class="text-center" id="remote">0.0.0.0</h3></div>
 			</div>
 			<div class="uptime">
 				<div class="panel-heading">Uptime</div>
-				<div class="panel-body"><h3 class="text-center">{{ uptime }}</h3></div>
+				<div class="panel-body"><h3 class="text-center" id="uptime">00:00</h3></div>
 			</div>
 			<div class="accesses">
 				<div class="panel-heading">Logged accesses</div>
-				<div class="panel-body"><h3 class="text-center">{{ accesses }}</h3></div>
+				<div class="panel-body"><h3 class="text-center" id="accesses">0</h3></div>
 			</div>
 		</div>
 		<div class="speed-panel">
 			<div class="rcv_speed">
 				<div class="panel-heading">Receive speed</div>
-				<div class="panel-body"><h3 class="text-center" id="rcv_speed"></h3></div>
+				<div class="panel-body"><h3 class="text-center" id="rcv_speed">0.00</h3></div>
 			</div>
 			<div class="send_speed">
 				<div class="panel-heading">Send speed</div>
-				<div class="panel-body"><h3 class="text-center" id="send_speed"></h3></div>
+				<div class="panel-body"><h3 class="text-center" id="send_speed">0.00</h3></div>
 			</div>
 		</div>
 
 		<script src="static/js/atomic.js" type="text/javascript"></script>
 		<script type="text/javascript">
-var connections = document.getElementById("connections");
-var rcv_speed = document.getElementById("rcv_speed");
-var send_speed = document.getElementById("send_speed");
-
-atomic.get('/rest/connections', 'application/json')
-.success(function (data, xhr) 
+function updateConnections()
 {
-	connections.innerHTML = data.connections;
-})
-.error(function (data, xhr) 
-{
-	connections.innerHTML = "Could not get data.";
-	connections.className = "error";
-});
-
-atomic.get('/rest/recieve_speed', 'application/json')
-.success(function (data, xhr) 
-{
-	rcv_speed.innerHTML = data.speed;
-})
-.error(function (data, xhr) 
-{
-	rcv_speed.innerHTML = "Could not get data.";
-	rcv_speed.className = "error";
-});
-
-atomic.get('/rest/send_speed', 'application/json')
-.success(function (data, xhr) 
-{
-	send_speed.innerHTML = data.speed;
-})
-.error(function (data, xhr) 
-{
-	send_speed.innerHTML = "Could not get data.";
-	send_speed.className = "error";
-});
-
-function checkTime(i)
-{
-    if (i<10) {i = "0" + i};  // add zero in front of numbers < 10
-    return i;
+	var connections = document.getElementById("connections");
+	
+	atomic.get('/rest/connections', 'application/json')
+	.success(function (data, xhr) 
+	{
+		connections.innerHTML = data.connections;
+		connections.className = "text-center high";
+	})
+	.error(function (data, xhr) 
+	{
+		connections.innerHTML = "Could not get data.";
+		connections.className = "error";
+	});
 }
 
-var today=new Date();
-var h=today.getHours();
-var m=today.getMinutes();
-var s=today.getSeconds();
-m = checkTime(m);
-document.getElementById('clock').innerHTML = "Server dashboard - {{ hostname }} - " + h + ":" + m;
+function updateSpeed()
+{
+	var rcv_speed = document.getElementById("rcv_speed");
+	var send_speed = document.getElementById("send_speed");
+
+	atomic.get('/rest/receive_speed', 'application/json')
+	.success(function (data, xhr) 
+	{
+		rcv_speed.innerHTML = data.speed;
+		rcv_speed.className = "text-center";
+	})
+	.error(function (data, xhr) 
+	{
+		rcv_speed.innerHTML = "Could not get data.";
+		rcv_speed.className = "error";
+	});
+
+	atomic.get('/rest/send_speed', 'application/json')
+	.success(function (data, xhr) 
+	{
+		send_speed.innerHTML = data.speed;
+		send_speed.className = "text-center";
+	})
+	.error(function (data, xhr) 
+	{
+		send_speed.innerHTML = "Could not get data.";
+		send_speed.className = "error";
+	});
+}
+
+function updateRemoteHost()
+{
+	var remote = document.getElementById("remote");
+	
+	atomic.get('/rest/remote_host', 'application/json')
+	.success(function (data, xhr) 
+	{
+		remote.innerHTML = data.address;
+		remote.className = "text-center";
+	})
+	.error(function (data, xhr) 
+	{
+		remote.innerHTML = "Could not get data.";
+		remote.className = "error";
+	});
+}
+
+function updateUptime()
+{
+	var uptime = document.getElementById("uptime");
+	
+	atomic.get('/rest/uptime', 'application/json')
+	.success(function (data, xhr) 
+	{
+		uptime.innerHTML = data.uptime;
+		uptime.className = "text-center";
+	})
+	.error(function (data, xhr) 
+	{
+		uptime.innerHTML = "Could not get data.";
+		uptime.className = "error";
+	});
+}
+
+function updateAccesses()
+{
+	var accesses = document.getElementById("accesses");
+	
+	atomic.get('/rest/accesses', 'application/json')
+	.success(function (data, xhr) 
+	{
+		accesses.innerHTML = data.accesses;
+		accesses.className = "text-center";
+	})
+	.error(function (data, xhr) 
+	{
+		accesses.innerHTML = "Could not get data.";
+		accesses.className = "error";
+	});
+}
+
+function updateTime()
+{
+	var today=new Date();
+	var h=today.getHours();
+	var m=today.getMinutes();
+	if (m < 10)
+	{
+		m = "0" + m
+	}
+	document.getElementById('clock').innerHTML = "Server dash board - {{ hostname }} - " + h + ":" + m;
+}
+
+function updateSlow()
+{
+	updateRemoteHost();
+	updateAccesses();
+	updateUptime();
+}
+
+function updateMinute()
+{
+	updateTime();
+}
+
+function updateFast()
+{
+	updateConnections();
+	updateSpeed();
+}
+
+updateSlow();
+updateMinute();
+updateFast();
+setInterval(updateSlow, 120000);
+setInterval(updateMinute, 60000);
+setInterval(updateFast, 2000);
 		</script>
 	</body>
 </html>
