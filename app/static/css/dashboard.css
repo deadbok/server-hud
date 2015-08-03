@@ -11,7 +11,15 @@ body {
 	background: black;
  	color: white;
 }
- 
+
+.header {
+	background: #22262B;
+	font-weight: bold;
+	border-width: 0em;
+	padding: 0em;
+	width: 100%;
+}
+
 .connections {
 	border: 0.1em solid silver;
 	border-radius: 1em;
@@ -33,7 +41,7 @@ body {
 	border-radius: 1em;
  	float: left;
  	margin: 0.5em;
- 	width: 20%;
+ 	width: 15%;
 }
 
 .accesses {
@@ -41,7 +49,7 @@ body {
 	border-radius: 1em;
  	float: left;
  	margin: 0.5em;
- 	width: 20%;
+ 	width: 15%;
 }
 
 .web-panel {
@@ -50,6 +58,33 @@ body {
 }
 
 .web-panel:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.rcv_speed {
+	border: 0.1em solid silver;
+	border-radius: 1em;
+ 	float: left;
+ 	margin: 0.5em;
+ 	width: 20%;
+}
+
+.send_speed {
+	border: 0.1em solid silver;
+	border-radius: 1em;
+ 	float: left;
+ 	margin: 0.5em;
+ 	width: 20%;
+}
+
+.speed-panel {
+    width: 100vw;
+    height: 33vh;
+}
+
+.speed-panel:after {
     content: "";
     clear: both;
     display: block;
@@ -78,4 +113,10 @@ body {
 	font-size: 5em;
 	font-weight: bold;
 	/*font-family: sans-serif;*/
+}
+
+.error
+{
+	color: red;
+}
 }
