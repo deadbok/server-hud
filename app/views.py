@@ -73,7 +73,7 @@ def send_speed():
     logger.debug("Get average outgoing speed.")
 
     if request.method == 'OPTIONS':
-        logger.debug("CORS request from: " + request.Headers['Origin'] + ".")
+        logger.debug("CORS request from: " + request.headers['Origin'] + ".")
 
     try:
         interfaces = psutil.net_io_counters(True)
