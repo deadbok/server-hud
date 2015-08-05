@@ -5,6 +5,7 @@
 from datetime import datetime
 
 from flask import jsonify
+from flask import request
 import psutil
 
 from app import APP
@@ -55,12 +56,12 @@ def rcv_speed():
     except ZeroDivisionError:
         logger.warning("Sampling to fast, while sampling incoming speed.")
     except KeyError:
-		logger.error("Interface not found.")
+            logger.error("Interface not found.")
 
     return jsonify(speed="{0:.2f}".format(AVG_RCV_SPEED))
 
 
-@APP.route('/rest/send_speed', methods=['GET'])
+@APP.route('/rest/send_speed', methods=['GET', 'OPTIONS'])
 def send_speed():
     '''
     Return average speed during the last 2 calls in JSON.
@@ -70,6 +71,9 @@ def send_speed():
     global LAST_SEND_TIME
 
     logger.debug("Get average outgoing speed.")
+
+    if request.method == 'OPTIONS':
+        logger.debug("CORS request from: " + request.Headers['Origin'] + ".")
 
     try:
         interfaces = psutil.net_io_counters(True)
@@ -96,7 +100,6 @@ def send_speed():
     except ZeroDivisionError:
         logger.warning("Sampling to fast, while sampling outgoing speed.")
     except KeyError:
-		logger.error("Interface not found.")
-        
+        logger.error("Interface not found.")
 
     return jsonify(speed="{0:.2f}".format(AVG_SEND_SPEED))
