@@ -1,3 +1,9 @@
+2015-08-06  oblivion  <oblivion@case>
+
+	* config.py: Added SERVICES.
+	* app/views.py: Added dynamic building of URLs.
+				  : Reverted speed functions to get local values.
+
 2015-08-05  oblivion  <oblivion@case>
 
 	* app/templates/index.html: Update remote host every minute, if there's an error.

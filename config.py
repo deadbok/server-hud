@@ -10,5 +10,8 @@ ACCESS_LOG = "/var/log/lighttpd/access.log"
 INTERFACE = "enp4s0"
 # Port to scan for number of connections
 PORT = 80
-#Debug logging.
+# Debug logging.
 DEBUG = True
+# List of enabled services on this instance.
+SERVICES = ['index', 'connections', 'rcv_speed', 'send_speed', 'uptime',
+            'remote_host', 'accesses']

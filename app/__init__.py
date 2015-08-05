@@ -20,3 +20,5 @@ else:
     init_file_log(logging.WARNING)
 
 from app import views  #@NoMove
+
+views.build_urls()

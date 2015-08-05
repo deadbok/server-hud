@@ -8,6 +8,8 @@ import socket
 
 from flask import jsonify
 from flask import render_template
+from flask import request
+from flask.json import jsonify
 import psutil
 import requests
 
@@ -23,8 +25,6 @@ LAST_RCV_TIME = 0
 LAST_SEND_TIME = 0
 
 
-@APP.route('/', methods=['GET'])
-@APP.route('/index', methods=['GET'])
 def index():
     '''
     Render the template for the dash board.
@@ -33,7 +33,6 @@ def index():
     return render_template('index.html', hostname=getfqdn())
 
 
-@APP.route('/rest/connections', methods=['GET'])
 def connections():
     '''
     Return a JSON object with number of connections on a port.
@@ -50,31 +49,89 @@ def connections():
     return jsonify(connections=active)
 
 
-@APP.route('/rest/receive_speed', methods=['GET'])
 def rcv_speed():
     '''
     Return average speed during the last 2 calls in JSON.
     '''
-    logger.debug("Getting incoming average speed from firewall.")
-    request = requests.get("http://malcom:5000/rest/receive_speed")
-    logger.debug("Got " + request.text + "from firewall.")
+    global AVG_RCV_SPEED
+    global LAST_RCV_BYTES
+    global LAST_RCV_TIME
 
-    return request.text
+    logger.debug("Get average incoming speed.")
+
+    try:
+        interfaces = psutil.net_io_counters(True)
+        now = datetime.now()
+        total_bytes_recv = interfaces[APP.config['INTERFACE']].bytes_recv
+
+        if LAST_RCV_TIME == 0:
+            LAST_RCV_BYTES = total_bytes_recv
+            LAST_RCV_TIME = now
+            logger.debug("First run, no average yet.")
+            return jsonify(speed=0)
+
+        time = (now - LAST_RCV_TIME).seconds
+        logger.debug("Sample period: " + str(time) + " seconds.")
+        rcv_bytes = total_bytes_recv - LAST_RCV_BYTES
+        logger.debug("Bytes received: " + str(rcv_bytes) + " bytes.")
+        speed = (rcv_bytes / time) / 1024
+        logger.debug("Sampled speed: " + str(speed) + "KiB/s.")
+
+        AVG_RCV_SPEED = (AVG_RCV_SPEED + speed) / 2
+        logger.debug("Average speed: " + str(AVG_RCV_SPEED) + " KiB/s.")
+        LAST_RCV_BYTES = total_bytes_recv
+        LAST_RCV_TIME = now
+    except ZeroDivisionError:
+        logger.warning("Sampling to fast, while sampling incoming speed.")
+    except KeyError:
+            logger.error("Interface not found.")
+
+    return jsonify(speed="{0:.2f}".format(AVG_RCV_SPEED))
 
 
-@APP.route('/rest/send_speed', methods=['GET'])
 def send_speed():
     '''
     Return average speed during the last 2 calls in JSON.
     '''
-    logger.debug("Getting outgoing average speed from firewall.")
-    request = requests.get("http://malcom:5000/rest/send_speed")
-    logger.debug("Got " + request.text + "from firewall.")
+    global AVG_SEND_SPEED
+    global LAST_SEND_BYTES
+    global LAST_SEND_TIME
 
-    return request.text
+    logger.debug("Get average outgoing speed.")
+
+    if request.method == 'OPTIONS':
+        logger.debug("CORS request from: " + request.headers['Origin'] + ".")
+
+    try:
+        interfaces = psutil.net_io_counters(True)
+        now = datetime.now()
+        total_bytes_sent = interfaces[APP.config['INTERFACE']].bytes_sent
+
+        if LAST_SEND_TIME == 0:
+            LAST_SEND_BYTES = total_bytes_sent
+            LAST_SEND_TIME = now
+            logger.debug("First run, no average yet.")
+            return jsonify(speed=0)
+
+        time = (now - LAST_SEND_TIME).seconds
+        logger.debug("Sample period: " + str(time) + " seconds.")
+        sent_bytes = total_bytes_sent - LAST_SEND_BYTES
+        logger.debug("Bytes sent: " + str(sent_bytes) + " bytes.")
+        speed = (sent_bytes / time) / 1024
+        logger.debug("Sampled speed: " + str(speed) + "KiB/s.")
+
+        AVG_SEND_SPEED = (AVG_SEND_SPEED + speed) / 2
+        logger.debug("Average speed: " + str(AVG_SEND_SPEED) + " KiB/s.")
+        LAST_SEND_BYTES = total_bytes_sent
+        LAST_SEND_TIME = now
+    except ZeroDivisionError:
+        logger.warning("Sampling to fast, while sampling outgoing speed.")
+    except KeyError:
+        logger.error("Interface not found.")
+
+    return jsonify(speed="{0:.2f}".format(AVG_SEND_SPEED))
 
 
-@APP.route('/rest/uptime', methods=['GET'])
 def uptime():
     '''
     Return uptime of the server process.
@@ -95,7 +152,6 @@ def uptime():
     return jsonify(uptime=proc_time)
 
 
-@APP.route('/rest/remote_host', methods=['GET'])
 def remote_host():
     '''
     Return name of the remote host.
@@ -125,7 +181,6 @@ def remote_host():
     return jsonify(address=rhost[0])
 
 
-@APP.route('/rest/accesses', methods=['GET'])
 def accesses():
     '''
     Return number of accesses logged..
@@ -145,3 +200,27 @@ def accesses():
     logger.debug("Log line: " + lines[-1] + ".")
 
     return jsonify(accesses=len(lines))
+
+
+@APP.route('/rest/services', methods=['GET', 'OPTIONS'])
+def services():
+    '''
+    Return the REST endpoint that are supported.
+    '''
+    return jsonify(services=APP.config['SERVICES'])
+
+
+def build_urls():
+    '''
+    Build all URL using configured services from SERVICES.
+    '''
+    logger.debug("Building urls.")
+    for service in APP.config['SERVICES']:
+        if service != 'index':
+            logger.debug("Adding: " + '/rest/' + service + ".")
+            # Everything but index is REST.
+            APP.add_url_rule('/rest/' + service, service, globals()[service],
+                             methods=['GET', 'OPTIONS'])
+        else:
+            logger.debug("Adding: " + "/.")
+            APP.add_url_rule('/', 'index', index, methods=['GET'])
