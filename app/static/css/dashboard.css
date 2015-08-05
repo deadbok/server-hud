@@ -52,11 +52,6 @@ body {
  	width: 15%;
 }
 
-.web-panel {
-    width: 100vw;
-    height: 33vh;
-}
-
 .web-panel:after {
     content: "";
     clear: both;
@@ -77,11 +72,6 @@ body {
  	float: left;
  	margin: 0.5em;
  	width: 20%;
-}
-
-.speed-panel {
-    width: 100vw;
-    height: 33vh;
 }
 
 .speed-panel:after {

@@ -79,7 +79,7 @@ function updateSpeed()
 		rcv_speed.className = "error";
 	});
 
-	atomic.get('/rest/send_speed', 'application/json')
+	atomic.get('http://malcom.groenholdt.net:5000/rest/send_speed', 'application/json')
 	.success(function (data, xhr) 
 	{
 		send_speed.innerHTML = data.speed;
@@ -164,6 +164,10 @@ function updateSlow()
 
 function updateMinute()
 {
+	if (remote.className == "error")
+	{
+		updateRemoteHost();	
+	}
 	updateTime();
 }
 

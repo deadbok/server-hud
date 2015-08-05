@@ -1,3 +1,7 @@
+2015-08-05  oblivion  <oblivion@case>
+
+	* app/templates/index.html: Update remote host every minute, if there's an error.
+
 2015-08-03  oblivion  <oblivion@case>
 
 	* app/__init__.py: Added logging.
