@@ -15,3 +15,5 @@ DEBUG = True
 # List of enabled services on this instance.
 SERVICES = ['index', 'connections', 'rcv_speed', 'send_speed', 'uptime',
             'remote_host', 'accesses']
+# List of allowed remote host.
+ALLOWED = ['http://case:5000']

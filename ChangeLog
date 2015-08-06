@@ -1,6 +1,8 @@
 2015-08-06  oblivion  <oblivion@case>
 
+	* app/templates/index.html: Fixed rest url for receive speed.
 	* config.py: Added SERVICES.
+				 Added ALLOWED.
 	* app/views.py: Added dynamic building of URLs.
 				  : Reverted speed functions to get local values.
 

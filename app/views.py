@@ -6,9 +6,11 @@ from datetime import datetime
 from socket import getfqdn
 import socket
 
+from flask import abort
 from flask import jsonify
 from flask import render_template
 from flask import request
+from flask.helpers import make_response
 from flask.json import jsonify
 import psutil
 import requests
@@ -84,7 +86,7 @@ def rcv_speed():
     except ZeroDivisionError:
         logger.warning("Sampling to fast, while sampling incoming speed.")
     except KeyError:
-            logger.error("Interface not found.")
+        logger.error("Interface not found.")
 
     return jsonify(speed="{0:.2f}".format(AVG_RCV_SPEED))
 
@@ -98,38 +100,60 @@ def send_speed():
     global LAST_SEND_TIME
 
     logger.debug("Get average outgoing speed.")
+    goon = False
 
     if request.method == 'OPTIONS':
         logger.debug("CORS request from: " + request.headers['Origin'] + ".")
+        if request.headers['Origin'] in APP.config['ALLOWED'] and \
+        request.headers['Access-Control-Request-Method'] == 'GET' and \
+        request.headers['Access-Control-Request-Headers'] == 'content-type':
+            resp = make_response('')
+            resp.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
+            resp.headers['Access-Control-Allow-Methods'] = 'GET'
+            resp.headers['Access-Control-Allow-Headers'] = 'content-type'
+            return resp
+        else:
+            goon = False
+    else:
+        goon = True
 
-    try:
-        interfaces = psutil.net_io_counters(True)
-        now = datetime.now()
-        total_bytes_sent = interfaces[APP.config['INTERFACE']].bytes_sent
+    if goon:
+        try:
+            interfaces = psutil.net_io_counters(True)
+            now = datetime.now()
+            total_bytes_sent = interfaces[APP.config['INTERFACE']].bytes_sent
 
-        if LAST_SEND_TIME == 0:
+            if LAST_SEND_TIME == 0:
+                LAST_SEND_BYTES = total_bytes_sent
+                LAST_SEND_TIME = now
+                logger.debug("First run, no average yet.")
+                return jsonify(speed=0)
+
+            time = (now - LAST_SEND_TIME).seconds
+            logger.debug("Sample period: " + str(time) + " seconds.")
+            sent_bytes = total_bytes_sent - LAST_SEND_BYTES
+            logger.debug("Bytes sent: " + str(sent_bytes) + " bytes.")
+            speed = (sent_bytes / time) / 1024
+            logger.debug("Sampled speed: " + str(speed) + "KiB/s.")
+
+            AVG_SEND_SPEED = (AVG_SEND_SPEED + speed) / 2
+            logger.debug("Average speed: " + str(AVG_SEND_SPEED) + " KiB/s.")
             LAST_SEND_BYTES = total_bytes_sent
             LAST_SEND_TIME = now
-            logger.debug("First run, no average yet.")
-            return jsonify(speed=0)
+        except ZeroDivisionError:
+            logger.warning("Sampling to fast, while sampling outgoing speed.")
+        except KeyError:
+            logger.error("Interface not found.")
 
-        time = (now - LAST_SEND_TIME).seconds
-        logger.debug("Sample period: " + str(time) + " seconds.")
-        sent_bytes = total_bytes_sent - LAST_SEND_BYTES
-        logger.debug("Bytes sent: " + str(sent_bytes) + " bytes.")
-        speed = (sent_bytes / time) / 1024
-        logger.debug("Sampled speed: " + str(speed) + "KiB/s.")
+        if 'Origin' in request.headers.keys \
+        and 'content-type' in request.headers:
+            rsp = make_response(jsonify(speed="{0:.2f}".format(AVG_SEND_SPEED)))
+            rsp.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
+            return rsp
 
-        AVG_SEND_SPEED = (AVG_SEND_SPEED + speed) / 2
-        logger.debug("Average speed: " + str(AVG_SEND_SPEED) + " KiB/s.")
-        LAST_SEND_BYTES = total_bytes_sent
-        LAST_SEND_TIME = now
-    except ZeroDivisionError:
-        logger.warning("Sampling to fast, while sampling outgoing speed.")
-    except KeyError:
-        logger.error("Interface not found.")
-
-    return jsonify(speed="{0:.2f}".format(AVG_SEND_SPEED))
+        return jsonify(speed="{0:.2f}".format(AVG_SEND_SPEED))
+    else:
+        abort(401)
 
 
 def uptime():
@@ -170,12 +194,9 @@ def remote_host():
         lines.append("Permission denied reading server log file.")
 
     logger.debug("Log line: " + lines[-1] + ".")
-    ip = lines[-1].split(' ')[0]
+    ip_addr = lines[-1].split(' ')[0]
 
-    if ip.startswith(':'):
-        ip = ip.split(':')[-1]
-    logger.debug("IP: " + ip + ".")
-    rhost = socket.gethostbyaddr(ip)
+    rhost = socket.gethostbyaddr(ip_addr)
     logger.debug("Host name from DNS: " + str(rhost) + ".")
 
     return jsonify(address=rhost[0])
