@@ -1,11 +1,16 @@
 2015-08-06  oblivion  <oblivion@case>
 
+	* app/static/css/dashboard.css: Lots of responsive stuff.
 	* app/templates/index.html: Fixed rest url for receive speed.
+								Update remote host name if connections is greater than last run.
+								Added footer.
+								Lots of responsive stuff.
 	* config.py: Added SERVICES.
 				 Added ALLOWED.
 	* app/views.py: Added dynamic building of URLs.
 				  : Reverted speed functions to get local values.
 				  : Added CORS to all the REST.
+				  : Count connections on all ports if asked.
 
 2015-08-05  oblivion  <oblivion@case>
 

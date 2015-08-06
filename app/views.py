@@ -79,9 +79,16 @@ def connections():
     active = 0
     # Get connections on port 80
     conn = psutil.net_connections('inet')
-    for connection in conn:
-        if connection.laddr[1] == APP.config['PORT']:
+    if APP.config['PORT'] == 'all':
+        logger.debug("Counting all active connections.")
+        for connection in conn:
             active += 1
+    else:
+        logger.debug("Counting connections on port: " +
+                     APP.config['PORT'] + ".")
+        for connection in conn:
+            if connection.laddr[1] == APP.config['PORT']:
+                active += 1
     # Return JSON
     logger.debug("Connections: " + str(active))
     return add_cors_headers(jsonify(connections=active))

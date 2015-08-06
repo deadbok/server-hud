@@ -3,8 +3,17 @@
  * Copyright 2015 Martin Bo Kristensen Grønholdt
  */
 
-* {
-    box-sizing: border-box;
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+  	box-sizing: border-box;
+}
+
+*, *:before, *:after {
+	-moz-box-sizing: inherit;
+	-webkit-box-sizing: inherit;
+	box-sizing: inherit;
 }
 
 body {
@@ -13,43 +22,52 @@ body {
 }
 
 .header {
-	background: #22262B;
+	/*background: #22262B;*/
 	font-weight: bold;
 	border-width: 0em;
-	padding: 0em;
+	padding: 0.2em;
+	margin-bottom: 0.2em;
 	width: 100%;
+}
+
+.footer {
+	background: #000000;
+	font-size: 0.75em;
+	border-width: 0em;
+	width: 100%;
+	
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	z-index: 3;
+	display: block;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	padding-left: 1em;
 }
 
 .connections {
 	border: 0.1em solid silver;
 	border-radius: 1em;
  	float: left;
- 	margin: 0.5em;
- 	width: 20%;
 }
  
 .url {
 	border: 0.1em solid silver;
 	border-radius: 1em;
  	float: left;
- 	margin: 0.5em;
- 	width: 75%;
 }
 
 .uptime {
 	border: 0.1em solid silver;
 	border-radius: 1em;
  	float: left;
- 	margin: 0.5em;
- 	width: 15%;
 }
 
 .accesses {
 	border: 0.1em solid silver;
 	border-radius: 1em;
  	float: left;
- 	margin: 0.5em;
- 	width: 15%;
 }
 
 .web-panel:after {
@@ -58,20 +76,10 @@ body {
     display: block;
 }
 
-.rcv_speed {
+.speed {
 	border: 0.1em solid silver;
 	border-radius: 1em;
  	float: left;
- 	margin: 0.5em;
- 	width: 20%;
-}
-
-.send_speed {
-	border: 0.1em solid silver;
-	border-radius: 1em;
- 	float: left;
- 	margin: 0.5em;
- 	width: 20%;
 }
 
 .speed-panel:after {
@@ -93,6 +101,7 @@ body {
 	padding: 0.5em;
 	border-top-left-radius: 1em;
 	border-top-right-radius: 1em;
+	text-align: center;
 }
 
 .panel-body {
@@ -100,7 +109,7 @@ body {
 }
 
 .high {
-	font-size: 5em;
+	font-size: 4.69em;
 	font-weight: bold;
 	/*font-family: sans-serif;*/
 }
@@ -108,5 +117,39 @@ body {
 .error
 {
 	color: red;
+}
+
+/* For mobile phones: */
+[class*="col-"] {
+    width: 96%;
+    margin: 2%;
+}
+
+/* For screen with a width of 800 or more. */
+@media only screen and (min-width: 800px) {
+    .col-1 {
+    	width: 15.66%;
+    	margin: 0.5%;
+    }
+    .col-2 {
+    	width: 32.32%;
+    	margin: 0.5%;
+    }
+    .col-3 {
+    	width: 48.98%;
+    	margin: 0.5%;
+    }
+    .col-4 {
+    	width: 65.64%;
+    	margin: 0.5%;
+    }
+    .col-5 {
+    	width: 82.30%;
+    	margin: 0.5%;
+    }
+    .col-6 {
+    	width: 98.96%;
+    	margin: 0.5%;
+    }
 }
 

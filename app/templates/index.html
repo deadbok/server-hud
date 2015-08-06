@@ -15,50 +15,77 @@
 	<body>
 		<div class="header"><div class="text-center" id="clock">Server dash board - {{ hostname }} - 00:00</div></div>
 		<div class="web-panel">
-			<div class="connections">
+			<div class="panel-heading"><div class="text-center">Web server stats</div></div>
+			<div class="connections col-2">
 	 			<div class="panel-heading">Active connections</div>
 				<div class="panel-body"><h1 class="text-center high" id="connections">0</h1></div>
 			</div>
-			<div class="url">
+			<div class="url col-4">
 				<div class="panel-heading">Latest remote address</div>
 				<div class="panel-body"><h3 class="text-center" id="remote">0.0.0.0</h3></div>
 			</div>
-			<div class="uptime">
+			<div class="uptime col-2">
 				<div class="panel-heading">Uptime</div>
 				<div class="panel-body"><h3 class="text-center" id="uptime">00:00</h3></div>
 			</div>
-			<div class="accesses">
+			<div class="accesses col-2">
 				<div class="panel-heading">Logged accesses</div>
 				<div class="panel-body"><h3 class="text-center" id="accesses">0</h3></div>
 			</div>
 		</div>
 		<div class="speed-panel">
-			<div class="rcv_speed">
-				<div class="panel-heading">Receive speed</div>
-				<div class="panel-body"><h3 class="text-center" id="rcv_speed">0.00</h3></div>
+			<div class="panel-heading"><div class="text-center">Firewall stats</div></div>
+			<div class="connections col-2">
+	 			<div class="panel-heading">Active connections</div>
+				<div class="panel-body"><h1 class="text-center high" id="fw_connections">0</h1></div>
 			</div>
-			<div class="send_speed">
+			<div class="speed col-4">
+				<div class="panel-heading">Receive speed</div>
+				<div class="panel-body"><h3 class="text-center" id="rcv_speed">0.00 KiB/s</h3></div>
+			</div>
+			<div class="speed col-4">
 				<div class="panel-heading">Send speed</div>
-				<div class="panel-body"><h3 class="text-center" id="send_speed">0.00</h3></div>
+				<div class="panel-body"><h3 class="text-center" id="send_speed">0.00 KiB/s</h3></div>
 			</div>
 		</div>
-
+		<div class="footer"><div class="text-center">Server HUD by Martin Bo Kristensen Gr&oslash;nholdt</div></div>
 		<script src="static/js/atomic.js" type="text/javascript"></script>
 		<script type="text/javascript">
+var last_connections = 0;
+
 function updateConnections()
 {
 	var connections = document.getElementById("connections");
 	
-	atomic.get('/rest/connections', 'application/json')
+	atomic.get('http://straylight.groenholdt.net:5000/rest/connections', 'application/json')
 	.success(function (data, xhr) 
 	{
 		connections.innerHTML = data.connections;
 		connections.className = "text-center high";
+		var current_connections = data.connections;
+		if (current_connections > last_connections)
+		{
+			updateRemoteHost()
+		}
+		last_connections = current_connections;
 	})
 	.error(function (data, xhr) 
 	{
 		connections.innerHTML = "Could not get data.";
 		connections.className = "error";
+	});
+
+	var connections_fw = document.getElementById("fw_connections");
+	atomic.get('http://malcom.groenholdt.net:5000/rest/connections', 'application/json')
+	.success(function (data, xhr) 
+	{
+		connections_fw.innerHTML = data.connections;
+		connections_fw.className = "text-center high";
+	})
+	.error(function (data, xhr) 
+	{
+		connections_fw.innerHTML = "Could not get data.";
+		connections_fw.className = "error";
 	});
 }
 
@@ -70,7 +97,7 @@ function updateSpeed()
 	atomic.get('http://malcom.groenholdt.net:5000/rest/rcv_speed', 'application/json')
 	.success(function (data, xhr) 
 	{
-		rcv_speed.innerHTML = data.speed;
+		rcv_speed.innerHTML = data.speed + " KiB/s";
 		rcv_speed.className = "text-center";
 	})
 	.error(function (data, xhr) 
@@ -82,7 +109,7 @@ function updateSpeed()
 	atomic.get('http://malcom.groenholdt.net:5000/rest/send_speed', 'application/json')
 	.success(function (data, xhr) 
 	{
-		send_speed.innerHTML = data.speed;
+		send_speed.innerHTML = data.speed  + " KiB/s";
 		send_speed.className = "text-center";
 	})
 	.error(function (data, xhr) 
@@ -96,7 +123,7 @@ function updateRemoteHost()
 {
 	var remote = document.getElementById("remote");
 	
-	atomic.get('/rest/remote_host', 'application/json')
+	atomic.get('http://straylight.groenholdt.net:5000/rest/remote_host', 'application/json')
 	.success(function (data, xhr) 
 	{
 		remote.innerHTML = data.address;
@@ -113,7 +140,7 @@ function updateUptime()
 {
 	var uptime = document.getElementById("uptime");
 	
-	atomic.get('/rest/uptime', 'application/json')
+	atomic.get('http://straylight.groenholdt.net:5000/rest/uptime', 'application/json')
 	.success(function (data, xhr) 
 	{
 		uptime.innerHTML = data.uptime;
@@ -130,7 +157,7 @@ function updateAccesses()
 {
 	var accesses = document.getElementById("accesses");
 	
-	atomic.get('/rest/accesses', 'application/json')
+	atomic.get('http://straylight.groenholdt.net:5000/rest/accesses', 'application/json')
 	.success(function (data, xhr) 
 	{
 		accesses.innerHTML = data.accesses;
