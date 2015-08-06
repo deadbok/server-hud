@@ -5,6 +5,7 @@
 				 Added ALLOWED.
 	* app/views.py: Added dynamic building of URLs.
 				  : Reverted speed functions to get local values.
+				  : Added CORS to all the REST.
 
 2015-08-05  oblivion  <oblivion@case>
 
