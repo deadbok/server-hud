@@ -33,7 +33,7 @@ def cors_answer_options():
     '''
     if 'Origin' in request.headers:
         logger.debug("CORS request from: " + request.headers['Origin'] + ".")
-        if request.headers['Origin'] in APP.config['ALLOWED'] and \
+        if request.headers['Origin'] in ('http://' + APP.config['ALLOWED']) and \
         request.headers['Access-Control-Request-Method'] == 'GET' and \
         request.headers['Access-Control-Request-Headers'] == 'content-type':
             resp = make_response('')
@@ -228,9 +228,13 @@ def remote_host():
     logger.debug("Log line: " + lines[-1] + ".")
     ip_addr = lines[-1].split(' ')[0]
 
-    rhost = socket.gethostbyaddr(ip_addr)
-    logger.debug("Host name from DNS: " + str(rhost) + ".")
+    try:
+        rhost = socket.gethostbyaddr(ip_addr)
+    except socket.herror:
+        logger.debug("DNS bugged out, sending IP: " + ip_addr + ".")
+        return add_cors_headers(jsonify(address=ip_addr))
 
+    logger.debug("Host name from DNS: " + str(rhost) + ".")
     return add_cors_headers(jsonify(address=rhost[0]))
 
 

@@ -5,12 +5,16 @@
 								Update remote host name if connections is greater than last run.
 								Added footer.
 								Lots of responsive stuff.
+								REST servers are configured in config.py
 	* config.py: Added SERVICES.
 				 Added ALLOWED.
+				 Added HOSTS.
 	* app/views.py: Added dynamic building of URLs.
-				  : Reverted speed functions to get local values.
-				  : Added CORS to all the REST.
-				  : Count connections on all ports if asked.
+				    Reverted speed functions to get local values.
+				    Added CORS to all the REST.
+				    Count connections on all ports if asked.
+				    Return IP is name resolution fails.
+				    Adding http:// to ALLOWED.
 
 2015-08-05  oblivion  <oblivion@case>
 
