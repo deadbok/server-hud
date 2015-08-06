@@ -41,6 +41,7 @@ def cors_answer_options():
             resp.headers['Access-Control-Allow-Methods'] = 'GET'
             resp.headers['Access-Control-Allow-Headers'] = 'content-type'
             return resp
+    logger.debug("CORS request failed.")
     abort(401)
 
 
@@ -52,6 +53,7 @@ def add_cors_headers(json):
 
     if 'Origin' in request.headers.keys() \
     and 'content-type' in request.headers:
+        logger.debug('Adding CORS headers to response.')
         rsp.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
 
     return rsp

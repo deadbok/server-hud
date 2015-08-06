@@ -67,7 +67,7 @@ function updateSpeed()
 	var rcv_speed = document.getElementById("rcv_speed");
 	var send_speed = document.getElementById("send_speed");
 
-	atomic.get('/rest/rcv_speed', 'application/json')
+	atomic.get('http://malcom.groenholdt.net:5000/rest/rcv_speed', 'application/json')
 	.success(function (data, xhr) 
 	{
 		rcv_speed.innerHTML = data.speed;
