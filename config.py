@@ -12,7 +12,7 @@ PROCESS_NAME = "lighttpd"
 # Access log of the web server.
 ACCESS_LOG = "/var/log/lighttpd/access.log"
 # Network interface to use when calculating speed.
-INTERFACE = "enp4s0"
+INTERFACE = "wlp2s0"
 # Port to scan for number of connections
 PORT = '80'
 # Debug logging.
@@ -30,3 +30,4 @@ HOSTS = {'web_connections': SERVER_STRAYLIGHT,
          'fw_connections': SERVER_MALCOM,
          'fw_rcv_speed': SERVER_MALCOM,
          'fw_send_speed': SERVER_MALCOM}
+

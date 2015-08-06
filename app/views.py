@@ -7,15 +7,13 @@ from socket import getfqdn
 import socket
 
 from flask import abort
-from flask import jsonify
+from flask import current_app
 from flask import render_template
 from flask import request
 from flask.helpers import make_response
 from flask.json import jsonify
 import psutil
-import requests
 
-from app import APP
 from app.log import logger
 
 
@@ -34,7 +32,7 @@ def cors_answer_options():
     if 'Origin' in request.headers:
         logger.debug("CORS request from: " + request.headers['Origin'] + ".")
         if request.headers['Origin'] in ('http://' +
-                                         host for host in APP.config['ALLOWED']) \
+                                         host for host in current_app.config['ALLOWED']) \
          and request.headers['Access-Control-Request-Method'] == 'GET' \
          and request.headers['Access-Control-Request-Headers'] == 'content-type':
             resp = make_response('')
@@ -80,15 +78,15 @@ def connections():
     active = 0
     # Get connections on port 80
     conn = psutil.net_connections('inet')
-    if APP.config['PORT'] == 'all':
+    if current_app.config['PORT'] == 'all':
         logger.debug("Counting all active connections.")
         for connection in conn:
             active += 1
     else:
         logger.debug("Counting connections on port: " +
-                     APP.config['PORT'] + ".")
+                     current_app.config['PORT'] + ".")
         for connection in conn:
-            if connection.laddr[1] == int(APP.config['PORT']):
+            if connection.laddr[1] == int(current_app.config['PORT']):
                 active += 1
     # Return JSON
     logger.debug("Connections: " + str(active))
@@ -111,7 +109,7 @@ def rcv_speed():
     try:
         interfaces = psutil.net_io_counters(True)
         now = datetime.now()
-        total_bytes_recv = interfaces[APP.config['INTERFACE']].bytes_recv
+        total_bytes_recv = interfaces[current_app.config['INTERFACE']].bytes_recv
 
         if LAST_RCV_TIME == 0:
             LAST_RCV_BYTES = total_bytes_recv
@@ -154,7 +152,7 @@ def send_speed():
     try:
         interfaces = psutil.net_io_counters(True)
         now = datetime.now()
-        total_bytes_sent = interfaces[APP.config['INTERFACE']].bytes_sent
+        total_bytes_sent = interfaces[current_app.config['INTERFACE']].bytes_sent
 
         if LAST_SEND_TIME == 0:
             LAST_SEND_BYTES = total_bytes_sent
@@ -185,7 +183,7 @@ def uptime():
     '''
     Return uptime of the server process.
     '''
-    logger.debug('Getting up time for "' + APP.config['PROCESS_NAME'] + '".')
+    logger.debug('Getting up time for "' + current_app.config['PROCESS_NAME'] + '".')
 
     if request.method == 'OPTIONS':
         return cors_answer_options()
@@ -195,7 +193,7 @@ def uptime():
     # Find the lighttpd process and get the create time, to calculate the up
     # time.
     for process in psutil.process_iter():
-        if process.name().find(APP.config['PROCESS_NAME']) != -1:
+        if process.name().find(current_app.config['PROCESS_NAME']) != -1:
             logger.debug("Process found.")
             proc_time = (datetime.now() -
                          datetime.fromtimestamp(process.create_time()))
@@ -217,13 +215,13 @@ def remote_host():
     # Get latest remote address from access.log.
     lines = list()
     try:
-        with open(APP.config['ACCESS_LOG'], "rt") as log_file:
+        with open(current_app.config['ACCESS_LOG'], "rt") as log_file:
             # And so lets waste a lot of memory, said the programmer.
             lines = log_file.readlines()
         log_file.close()
     except PermissionError:
         logger.error("Permission denied reading log file: " +
-                     APP.config['ACCESS_LOG'])
+                     current_app.config['ACCESS_LOG'])
         lines.append("Permission denied reading server log file.")
 
     logger.debug("Log line: " + lines[-1] + ".")
@@ -249,13 +247,13 @@ def accesses():
     # Get latest remote address from access.log.
     lines = list()
     try:
-        with open(APP.config['ACCESS_LOG'], "rt") as log_file:
+        with open(current_app.config['ACCESS_LOG'], "rt") as log_file:
             # And so lets waste a lot of memory, said the programmer.
             lines = log_file.readlines()
         log_file.close()
     except PermissionError:
         logger.error("Permission denied reading log file: " +
-                     APP.config['ACCESS_LOG'])
+                     current_app.config['ACCESS_LOG'])
         lines.append("Permission denied reading server log file.")
 
     logger.debug("Log line: " + lines[-1] + ".")
@@ -263,25 +261,9 @@ def accesses():
     return add_cors_headers(jsonify(accesses=len(lines)))
 
 
-@APP.route('/rest/services', methods=['GET', 'OPTIONS'])
 def services():
     '''
     Return the REST endpoint that are supported.
     '''
-    return jsonify(services=APP.config['SERVICES'])
+    return jsonify(services=current_app.config['SERVICES'])
 
-
-def build_urls():
-    '''
-    Build all URL using configured services from SERVICES.
-    '''
-    logger.debug("Building urls.")
-    for service in APP.config['SERVICES']:
-        if service != 'index':
-            logger.debug("Adding: " + '/rest/' + service + ".")
-            # Everything but index is REST.
-            APP.add_url_rule('/rest/' + service, service, globals()[service],
-                             methods=['GET', 'OPTIONS'])
-        else:
-            logger.debug("Adding: " + "/.")
-            APP.add_url_rule('/', 'index', index, methods=['GET'])
