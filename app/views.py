@@ -145,7 +145,7 @@ def send_speed():
         except KeyError:
             logger.error("Interface not found.")
 
-        if 'Origin' in request.headers.keys \
+        if 'Origin' in request.headers.keys() \
         and 'content-type' in request.headers:
             rsp = make_response(jsonify(speed="{0:.2f}".format(AVG_SEND_SPEED)))
             rsp.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
