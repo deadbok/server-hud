@@ -87,7 +87,7 @@ def connections():
         logger.debug("Counting connections on port: " +
                      APP.config['PORT'] + ".")
         for connection in conn:
-            if connection.laddr[1] == APP.config['PORT']:
+            if connection.laddr[1] == int(APP.config['PORT']):
                 active += 1
     # Return JSON
     logger.debug("Connections: " + str(active))
