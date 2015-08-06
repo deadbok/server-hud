@@ -33,9 +33,10 @@ def cors_answer_options():
     '''
     if 'Origin' in request.headers:
         logger.debug("CORS request from: " + request.headers['Origin'] + ".")
-        if request.headers['Origin'] in ('http://' + APP.config['ALLOWED']) and \
-        request.headers['Access-Control-Request-Method'] == 'GET' and \
-        request.headers['Access-Control-Request-Headers'] == 'content-type':
+        if request.headers['Origin'] in ('http://' +
+                                         host for host in APP.config['ALLOWED']) \
+         and request.headers['Access-Control-Request-Method'] == 'GET' \
+         and request.headers['Access-Control-Request-Headers'] == 'content-type':
             resp = make_response('')
             resp.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
             resp.headers['Access-Control-Allow-Methods'] = 'GET'
