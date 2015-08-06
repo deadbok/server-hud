@@ -57,7 +57,7 @@ function updateConnections()
 {
 	var connections = document.getElementById("connections");
 	
-	atomic.get('http://straylight.groenholdt.net:5000/rest/connections', 'application/json')
+	atomic.get('{{ config['HOSTS']['web_connections'] }}/rest/connections', 'application/json')
 	.success(function (data, xhr) 
 	{
 		connections.innerHTML = data.connections;
@@ -76,7 +76,7 @@ function updateConnections()
 	});
 
 	var connections_fw = document.getElementById("fw_connections");
-	atomic.get('http://malcom.groenholdt.net:5000/rest/connections', 'application/json')
+	atomic.get('{{ config['HOSTS']['fw_connections'] }}/rest/connections', 'application/json')
 	.success(function (data, xhr) 
 	{
 		connections_fw.innerHTML = data.connections;
@@ -94,7 +94,7 @@ function updateSpeed()
 	var rcv_speed = document.getElementById("rcv_speed");
 	var send_speed = document.getElementById("send_speed");
 
-	atomic.get('http://malcom.groenholdt.net:5000/rest/rcv_speed', 'application/json')
+	atomic.get('{{ config['HOSTS']['fw_rcv_speed'] }}/rest/rcv_speed', 'application/json')
 	.success(function (data, xhr) 
 	{
 		rcv_speed.innerHTML = data.speed + " KiB/s";
@@ -106,7 +106,7 @@ function updateSpeed()
 		rcv_speed.className = "error";
 	});
 
-	atomic.get('http://malcom.groenholdt.net:5000/rest/send_speed', 'application/json')
+	atomic.get('{{ config['HOSTS']['fw_send_speed'] }}/rest/send_speed', 'application/json')
 	.success(function (data, xhr) 
 	{
 		send_speed.innerHTML = data.speed  + " KiB/s";
@@ -123,7 +123,7 @@ function updateRemoteHost()
 {
 	var remote = document.getElementById("remote");
 	
-	atomic.get('http://straylight.groenholdt.net:5000/rest/remote_host', 'application/json')
+	atomic.get('{{ config['HOSTS']['web_remote_host'] }}/rest/remote_host', 'application/json')
 	.success(function (data, xhr) 
 	{
 		remote.innerHTML = data.address;
@@ -140,7 +140,7 @@ function updateUptime()
 {
 	var uptime = document.getElementById("uptime");
 	
-	atomic.get('http://straylight.groenholdt.net:5000/rest/uptime', 'application/json')
+	atomic.get('{{ config['HOSTS']['web_uptime'] }}/rest/uptime', 'application/json')
 	.success(function (data, xhr) 
 	{
 		uptime.innerHTML = data.uptime;
@@ -157,7 +157,7 @@ function updateAccesses()
 {
 	var accesses = document.getElementById("accesses");
 	
-	atomic.get('http://straylight.groenholdt.net:5000/rest/accesses', 'application/json')
+	atomic.get('{{ config['HOSTS']['web_accesses'] }}/rest/accesses', 'application/json')
 	.success(function (data, xhr) 
 	{
 		accesses.innerHTML = data.accesses;
