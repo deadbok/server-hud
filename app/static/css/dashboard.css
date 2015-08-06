@@ -55,25 +55,25 @@ h3 {
 }
 
 .connections {
-	border: 0.1vh solid silver;
+	border: 0.25vh solid silver;
 	border-radius: 1em;
  	float: left;
 }
  
 .url {
-	border: 0.1vh solid silver;
+	border: 0.25vh solid silver;
 	border-radius: 1em;
  	float: left;
 }
 
 .uptime {
-	border: 0.1vh solid silver;
+	border: 0.25vh solid silver;
 	border-radius: 1em;
  	float: left;
 }
 
 .accesses {
-	border: 0.1vh solid silver;
+	border: 0.25vh solid silver;
 	border-radius: 1em;
  	float: left;
 }
@@ -85,7 +85,7 @@ h3 {
 }
 
 .speed {
-	border: 0.1vh solid silver;
+	border: 0.25vh solid silver;
 	border-radius: 1em;
  	float: left;
 }
@@ -103,8 +103,7 @@ h3 {
 .panel-heading {
 	background: #22262B;
 	font-weight: bold;
-	border-width: 0.1vh;
-	border-color:silver;
+	border: 0.25vh solid silver;
 	border-style: none none solid none;
 	padding: 1vh;
 	font-size: 2.60vh;
