@@ -219,7 +219,7 @@ def remote_host():
             # And so lets waste a lot of memory, said the programmer.
             lines = log_file.readlines()
         log_file.close()
-    except OSError:
+    except IOError:
         logger.error("Permission denied reading log file: " +
                      current_app.config['ACCESS_LOG'])
         lines.append("Permission denied reading server log file.")
@@ -251,7 +251,7 @@ def accesses():
             # And so lets waste a lot of memory, said the programmer.
             lines = log_file.readlines()
         log_file.close()
-    except PermissionError:
+    except IOError:
         logger.error("Permission denied reading log file: " +
                      current_app.config['ACCESS_LOG'])
         lines.append("Permission denied reading server log file.")
