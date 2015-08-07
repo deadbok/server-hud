@@ -229,7 +229,7 @@ def remote_host():
 
     try:
         rhost = socket.gethostbyaddr(ip_addr)
-    except socket.herror:
+    except (socket.herror, socket.gaierror):
         logger.debug("DNS bugged out, sending IP: " + ip_addr + ".")
         return add_cors_headers(jsonify(address=ip_addr))
 
