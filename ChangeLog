@@ -1,3 +1,8 @@
+2015-08-13  oblivion  <oblivion@case>
+
+	* app/__init__.py: Logging using flask.
+	* app/views.py: Logging using flask.
+
 2015-08-06  oblivion  <oblivion@case>
 
 	* app/static/css/dashboard.css: Lots of responsive stuff.
