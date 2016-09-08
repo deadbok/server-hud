@@ -76,14 +76,14 @@ def connections():
     active = 0
     # Get connections on port 80
     conn = psutil.net_connections('inet')
-    if current_app.config['PORT'] == 'all':
+    if current_app.config['PORT'][0] == 'all':
         current_app.logger.debug("Counting all active connections.")
         for connection in conn:
             active += 1
     else:
 		for port in current_app.config['PORT']:
 			current_app.logger.debug("Counting connections on port: " +
-						current_app.config['PORT'] + ".")
+						port + ".")
 			for connection in conn:
 				if connection.laddr[1] == int(port):
 					active += 1
