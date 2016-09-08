@@ -81,11 +81,12 @@ def connections():
         for connection in conn:
             active += 1
     else:
-        current_app.logger.debug("Counting connections on port: " +
-                     current_app.config['PORT'] + ".")
-        for connection in conn:
-            if connection.laddr[1] == int(current_app.config['PORT']):
-                active += 1
+		for port in current_app.config['PORT']:
+			current_app.logger.debug("Counting connections on port: " +
+						current_app.config['PORT'] + ".")
+			for connection in conn:
+				if connection.laddr[1] == int(port):
+					active += 1
     # Return JSON
     current_app.logger.debug("Connections: " + str(active))
     return add_cors_headers(jsonify(connections=active))
