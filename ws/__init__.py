@@ -11,6 +11,7 @@ from ws import accesses
 from ws import connections
 from ws import remote_host
 from ws import uptime
+from ws import speed
 
 from config import CONFIG
 
