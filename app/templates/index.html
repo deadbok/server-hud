@@ -50,31 +50,21 @@
 		</div>
 		<div class="footer"><div class="text-center">Network dash by Martin Bo Kristensen Gr&oslash;nholdt</div></div>
 		<script src="static/js/atomic.js" type="text/javascript"></script>
+		<script src="static/js/reconnecting-websocket.min.js" type="text/javascript"></script>
 		<script type="text/javascript">
 var last_connections = 0;
+var ws_conn = new ReconnectingWebSocket('{{ config['HOSTS']['web_connections'] }}/ws/connections');
+var ws_accesses = new ReconnectingWebSocket('{{ config['HOSTS']['web_accesses'] }}/ws/accesses');
+var ws_host = new ReconnectingWebSocket('{{ config['HOSTS']['web_remote_host'] }}/ws/remote_host');
+var ws_uptime = new ReconnectingWebSocket('{{ config['HOSTS']['web_uptime'] }}/ws/uptime');
+
+var connections = document.getElementById("connections");
+var remote = document.getElementById("remote");
+var uptime = document.getElementById("uptime");
+var accesses = document.getElementById("accesses");
 
 function updateConnections()
 {
-	var connections = document.getElementById("connections");
-	
-	atomic.get('{{ config['HOSTS']['web_connections'] }}/rest/connections', 'application/json')
-	.success(function (data, xhr) 
-	{
-		connections.innerHTML = data.connections;
-		connections.className = "text-center high";
-		var current_connections = data.connections;
-		if (current_connections > last_connections)
-		{
-			updateRemoteHost()
-		}
-		last_connections = current_connections;
-	})
-	.error(function (data, xhr) 
-	{
-		connections.innerHTML = "Could not get data.";
-		connections.className = "error";
-	});
-
 	var connections_fw = document.getElementById("fw_connections");
 	atomic.get('{{ config['HOSTS']['fw_connections'] }}/rest/connections', 'application/json')
 	.success(function (data, xhr) 
@@ -119,57 +109,6 @@ function updateSpeed()
 	});
 }
 
-function updateRemoteHost()
-{
-	var remote = document.getElementById("remote");
-	
-	atomic.get('{{ config['HOSTS']['web_remote_host'] }}/rest/remote_host', 'application/json')
-	.success(function (data, xhr) 
-	{
-		remote.innerHTML = data.address;
-		remote.className = "text-center";
-	})
-	.error(function (data, xhr) 
-	{
-		remote.innerHTML = "Could not get data.";
-		remote.className = "error";
-	});
-}
-
-function updateUptime()
-{
-	var uptime = document.getElementById("uptime");
-	
-	atomic.get('{{ config['HOSTS']['web_uptime'] }}/rest/uptime', 'application/json')
-	.success(function (data, xhr) 
-	{
-		uptime.innerHTML = data.uptime;
-		uptime.className = "text-center";
-	})
-	.error(function (data, xhr) 
-	{
-		uptime.innerHTML = "Could not get data.";
-		uptime.className = "error";
-	});
-}
-
-function updateAccesses()
-{
-	var accesses = document.getElementById("accesses");
-	
-	atomic.get('{{ config['HOSTS']['web_accesses'] }}/rest/accesses', 'application/json')
-	.success(function (data, xhr) 
-	{
-		accesses.innerHTML = data.accesses;
-		accesses.className = "text-center";
-	})
-	.error(function (data, xhr) 
-	{
-		accesses.innerHTML = "Could not get data.";
-		accesses.className = "error";
-	});
-}
-
 function updateTime()
 {
 	var today=new Date();
@@ -182,19 +121,8 @@ function updateTime()
 	document.getElementById('clock').innerHTML = "Server dash board - {{ hostname }} - " + h + ":" + m;
 }
 
-function updateSlow()
-{
-	updateRemoteHost();
-	updateAccesses();
-	updateUptime();
-}
-
 function updateMinute()
 {
-	if (remote.className == "error")
-	{
-		updateRemoteHost();	
-	}
 	updateTime();
 }
 
@@ -204,12 +132,58 @@ function updateFast()
 	updateSpeed();
 }
 
-updateSlow();
 updateMinute();
 updateFast();
-setInterval(updateSlow, 180000);
 setInterval(updateMinute, 60000);
 setInterval(updateFast, 5000);
+
+// Process connections messages
+ws_conn.onopen = function(event)
+{
+	ws_conn.send("");
+};
+
+ws_conn.onmessage = function(event)
+{
+	json_data = JSON.parse(event.data)
+	connections.innerHTML = json_data.connections;
+};
+
+//Process access messages
+ws_accesses.onopen = function(event)
+{
+	ws_accesses.send("");
+};
+
+ws_accesses.onmessage = function(event)
+{
+	json_data = JSON.parse(event.data)
+	accesses.innerHTML = json_data.accesses;
+};
+
+//Process remote host messages
+ws_host.onopen = function(event)
+{
+	ws_host.send("");
+};
+
+ws_host.onmessage = function(event)
+{
+	json_data = JSON.parse(event.data)
+	remote.innerHTML = json_data.remote_host;
+};
+
+//Process uptime messages
+ws_uptime.onopen = function(event)
+{
+	ws_uptime.send("");
+};
+
+ws_uptime.onmessage = function(event)
+{
+	json_data = JSON.parse(event.data)
+	uptime.innerHTML = json_data.uptime;
+};
 		</script>
 	</body>
 </html>
