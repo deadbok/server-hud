@@ -13,9 +13,6 @@ from ws.config import CONFIG
 from ws.log import logger
 
 
-HANDLER = None
-OBSERVER = None
-
 class WebSocketconnectionsHandler(tornado.websocket.WebSocketHandler):
 
     def __init__(self, *args, **kwargs):
