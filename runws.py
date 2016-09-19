@@ -16,11 +16,17 @@ from ws.config import CONFIG
 from ws.log import logger, init_file_log, init_console_log, close_log
 
 
+define("debug", default=False, help="Log debug information", type=bool)
 define("port", default=5000, help="run on the given port", type=int)
 
 
 if __name__ == "__main__":
     # Init logging to file
+    if options.debug:
+        init_file_log(logging.DEBUG)
+    else:
+        init_file_log(logging.INFO)
+    
     init_file_log(logging.DEBUG)
 
     logger.info("server-hud WebSocket server version " + __version__)

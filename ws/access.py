@@ -12,22 +12,27 @@ from watchdog.events import FileSystemEventHandler
 from ws.config import CONFIG
 
 class AccessHandler(FileSystemEventHandler):
+    instances = 0
     def __init__(self, handler, *args, **kwargs):
         logger.debug("Creating WebSocket file access handler")
         super(AccessHandler, self).__init__(*args, **kwargs)
         self.handlers = [handler]
         self.accesses = 0
         self.lastline = ""
+        AccessHandler.instances += 1
+        logger.debug(str(AccessHandler.instances) + " active handlers")
+        self.id = AccessHandler.instances
         self.read_access_log()
 
     def handle(self, data):
-        logger.debug("Handling: " + str(data))
+        logger.debug("(" + str(self.id) + ") Handling: " + str(data))
         for handler in self.handlers:
-            logger.debug("Calling handler")
+            logger.debug("(" + str(self.id) + ") Calling handler")
             handler(data)
 
     def read_access_log(self):
         # Count number of lines
+        logger.debug("(" + str(self.id) + ") Reading log file.")
         with open(CONFIG['ACCESS_LOG']) as log_file:
             for line_number, line in enumerate(log_file, 1):
                 pass
@@ -40,7 +45,7 @@ class AccessHandler(FileSystemEventHandler):
 
     def on_modified(self, event):
         filename = os.path.basename(event.src_path)
-        logger.debug("Access: " + filename)
+        logger.debug("(" + str(self.id) + ") Access: " + filename)
         if (filename == os.path.basename(CONFIG['ACCESS_LOG'])):
             self.read_access_log()
 
@@ -52,3 +57,5 @@ class AccessHandler(FileSystemEventHandler):
     def remove_handler(self, handler):
         if handler in self.handlers:
             self.handlers.remove(handler)
+        AccessHandler.instances -= 1
+        logger.debug(str(AccessHandler.instances) + " active handlers")
