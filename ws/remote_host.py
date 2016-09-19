@@ -16,8 +16,8 @@ from ws.access import AccessHandler
 from ws.config import CONFIG
 
 
-HANDLER = None
-OBSERVER = None
+HANDLER = {}
+OBSERVER = {}
 
 
 class WebSocketremote_hostHandler(tornado.websocket.WebSocketHandler):
@@ -46,31 +46,38 @@ class WebSocketremote_hostHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
         global HANDLER, OBSERVER
-        if not self.observer:
-            HANDLER = AccessHandler(handler=getattr(self, 'send'))
-            OBSERVER = Observer()
-            log_dir, _ = os.path.split(CONFIG['ACCESS_LOG'])
-            logger.info("Watching file: " + log_dir)
-            OBSERVER.schedule(HANDLER, log_dir, recursive=True)
+        
+        self.path, _ = os.path.split(CONFIG['ACCESS_LOG'])
+        if self.path not in HANDLER:
+            HANDLER[self.path] = AccessHandler(handler=getattr(self, 'send'))
+            OBSERVER[self.path] = Observer()
+            logger.info("Watching: " + self.path)
+            OBSERVER[self.path].schedule(HANDLER[self.path], self.path, recursive=True)
             try:
-                OBSERVER.start()
+                OBSERVER[self.path].start()
             except OSError:
                 logger.error('Cannot start observer')
                 self.close()
                 return
         self.observer = True
-        self.send({ "lastline": HANDLER.lastline})
+        self.send({ "lastline": HANDLER[self.path].lastline})
 
     def on_message(self, message):
-        self.send({ "lastline": HANDLER.lastline})
+        global HANDLER
+        
+        self.send({ "lastline": HANDLER[self.path].lastline})
 
     def on_close(self):
         global HANDLER, OBSERVER
+        
         logger.debug("Connection closed")
         self.connected = False
         if self.observer:
-            HANDLER.remove_handler(getattr(self, 'send'))
-            OBSERVER.stop()
-            OBSERVER = None
-            HANDLER = None
-            self.observer = False
+            logger.debug("Stop watching:" + self.path)
+            HANDLER[self.path].remove_handler(getattr(self, 'send'))
+
+            if len(HANDLER[self.path].handlers):
+                OBSERVER[self.path].stop()
+                del OBSERVER[self.path]
+                del HANDLER[self.path]
+                self.observer = False
