@@ -10,7 +10,7 @@ import tornado.websocket
 from tornado.ioloop import PeriodicCallback
 
 from ws.log import logger
-from ws.config import CONFIG
+import ws
 
 HANDLER = None
 OBSERVER = None
@@ -36,7 +36,7 @@ class WebSocketuptimeHandler(tornado.websocket.WebSocketHandler):
         # Find the lighttpd process and get the create time, to calculate the up
         # time.
         for process in psutil.process_iter():
-            if process.name().find(CONFIG['PROCESS_NAME']) != -1:
+            if process.name().find(ws.config.CONFIG['PROCESS_NAME']) != -1:
                 logger.debug("Process found.")
                 proc_time = (datetime.now() -
                              datetime.fromtimestamp(process.create_time()))

@@ -9,7 +9,7 @@ import tornado.websocket
 import tornado.ioloop
 from tornado.ioloop import PeriodicCallback
 
-from ws.config import CONFIG
+import ws
 from ws.log import logger
 
 
@@ -32,13 +32,13 @@ class WebSocketconnectionsHandler(tornado.websocket.WebSocketHandler):
         # Get all connections using psutil
         conn = psutil.net_connections('inet')
 
-        if CONFIG['PORT'][0] == 'all':
+        if ws.config.CONFIG['PORT'][0] == 'all':
             # If we need the count for all ports we've got it.
             for connection in conn:
                 self.connections += 1
         else:
             # Isolate date for the requested ports.
-            for port in CONFIG['PORT']:
+            for port in ws.config.CONFIG['PORT']:
                 for connection in conn:
                     if connection.laddr[1] == int(port):
                         self.connections += 1

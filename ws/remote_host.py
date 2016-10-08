@@ -13,7 +13,7 @@ from watchdog.observers import Observer
 
 from ws.log import logger
 from ws.access import AccessHandler
-from ws.config import CONFIG
+import ws
 
 
 HANDLER = {}
@@ -46,8 +46,8 @@ class WebSocketremote_hostHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
         global HANDLER, OBSERVER
-        
-        self.path, _ = os.path.split(CONFIG['ACCESS_LOG'])
+
+        self.path, _ = os.path.split(ws.config.CONFIG['ACCESS_LOG'])
         if self.path not in HANDLER:
             HANDLER[self.path] = AccessHandler(handler=getattr(self, 'send'))
             OBSERVER[self.path] = Observer()
@@ -64,12 +64,12 @@ class WebSocketremote_hostHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         global HANDLER
-        
+
         self.send({ "lastline": HANDLER[self.path].lastline})
 
     def on_close(self):
         global HANDLER, OBSERVER
-        
+
         logger.debug("Connection closed")
         self.connected = False
         if self.observer:

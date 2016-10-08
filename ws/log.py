@@ -12,27 +12,25 @@ import sys
 logger = logging.getLogger("server-hud-ws")
 '''Our Logger object'''
 
-logger.setLevel(logging.DEBUG)
-
-file_log = handlers.RotatingFileHandler("runws.log",
-                                       maxBytes=10000000,
-                                       backupCount=5)
-'''Handler for logging to a file.'''
-
-file_log.setLevel(logging.DEBUG)
-file_log.setFormatter(logging.Formatter('%(asctime)s - %(filename)s - %(funcName)s - %(levelname)s: %(message)s'))
-logger.addHandler(file_log)
-file_log.doRollover()
+# logger.setLevel(logging.DEBUG)
 
 console_log = logging.StreamHandler(sys.stdout)
 '''Handler for logging to the console.'''
 
-def init_file_log(level=logging.DEBUG):
+def init_file_log(level=logging.DEBUG, path=None):
     '''Initialise the file logging.
 
     :param level: The level at which the message is logged to the file.
     :type level: logging level
     '''
+    if path is None:
+        path = "/var/log/server-hud-ws.log"
+    file_log = handlers.RotatingFileHandler(path,
+                                       maxBytes=10000000,
+                                       backupCount=5)
+    file_log.setFormatter(logging.Formatter('%(asctime)s - %(filename)s - %(funcName)s - %(levelname)s: %(message)s'))
+    logger.addHandler(file_log)
+    file_log.doRollover()
     file_log.setLevel(level)
 
 

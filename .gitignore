@@ -64,4 +64,4 @@ target/
 #logging
 *.log.*
 
-config.py
+./config.py

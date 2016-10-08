@@ -11,7 +11,7 @@ import tornado.websocket
 import tornado.ioloop
 from tornado.ioloop import PeriodicCallback
 
-from ws.config import CONFIG
+import ws
 from ws.log import logger
 
 
@@ -41,8 +41,8 @@ class WebSocketspeedHandler(tornado.websocket.WebSocketHandler):
             try:
                 interfaces = psutil.net_io_counters(True)
                 now = datetime.now()
-                total_bytes_recv = interfaces[CONFIG['INTERFACE']].bytes_recv
-                total_bytes_sent = interfaces[CONFIG['INTERFACE']].bytes_sent
+                total_bytes_recv = interfaces[ws.config.CONFIG['INTERFACE']].bytes_recv
+                total_bytes_sent = interfaces[ws.config.CONFIG['INTERFACE']].bytes_sent
 
                 time = (now - self.last_rcv_time).seconds
                 logger.debug("Sample period: " + str(time) + " seconds.")

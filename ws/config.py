@@ -5,9 +5,16 @@
 import os
 import types
 
-def read_config():
-    config = dict()
-    config_filename = os.getcwd() + '/config.py'
+
+CONFIG = None
+
+
+def read_config(config_filename=None):
+    global CONFIG
+
+    CONFIG = dict()
+    if config_filename is None:
+        config_filename = os.getcwd() + '/config.py'
     d = types.ModuleType(config_filename)
     d.__file__ = config_filename
     try:
@@ -20,8 +27,9 @@ def read_config():
             d = import_string(d)
     for key in dir(d):
         if key.isupper():
-            config[key] = getattr(d, key)
-    return config
+            CONFIG[key] = getattr(d, key)
+    return CONFIG
 
-# Read the config file.
-CONFIG = read_config()
+
+def init_config(path=None):
+    read_config(path)

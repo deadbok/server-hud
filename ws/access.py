@@ -5,11 +5,11 @@
 import json
 import os.path
 
+import ws
+
 from ws.log import logger
 
 from watchdog.events import FileSystemEventHandler
-
-from ws.config import CONFIG
 
 class AccessHandler(FileSystemEventHandler):
     instances = 0
@@ -33,7 +33,7 @@ class AccessHandler(FileSystemEventHandler):
     def read_access_log(self):
         # Count number of lines
         logger.debug("(" + str(self.id) + ") Reading log file.")
-        with open(CONFIG['ACCESS_LOG']) as log_file:
+        with open(ws.config.CONFIG['ACCESS_LOG']) as log_file:
             for line_number, line in enumerate(log_file, 1):
                 pass
         if (self.accesses <= line_number):
@@ -46,7 +46,7 @@ class AccessHandler(FileSystemEventHandler):
     def on_modified(self, event):
         filename = os.path.basename(event.src_path)
         logger.debug("(" + str(self.id) + ") Access: " + filename)
-        if (filename == os.path.basename(CONFIG['ACCESS_LOG'])):
+        if (filename == os.path.basename(ws.config.CONFIG['ACCESS_LOG'])):
             self.read_access_log()
 
         self.handle({ "accesses": self.accesses, "lastline": self.lastline})
