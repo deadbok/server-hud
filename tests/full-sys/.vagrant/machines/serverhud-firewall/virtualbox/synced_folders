@@ -1,0 +1,1 @@
+{"rsync":{"/vagrant":{"type":"rsync","guestpath":"/vagrant","hostpath":"/home/oblivion/sync-src/python/flask/server-hud/tests/full-sys","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}

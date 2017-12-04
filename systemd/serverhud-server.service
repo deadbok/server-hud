@@ -1,0 +1,15 @@
+[Unit]
+Description=Server HUD server
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/serverhud-server --config=/home/serverhud/config.py --debug
+StandardInput=tty-force
+StandardOutput=journal
+StandardError=journal
+User=serverhud
+Group=serverhud
+
+[Install]
+WantedBy=multi-user.target

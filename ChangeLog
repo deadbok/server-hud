@@ -1,3 +1,23 @@
+2015-12-03  oblivion  <oblivion@linda_lee>
+
+	* .gitignore: Simplify.
+    * build_pip.sh: Script to build a Python package.
+    * develop.sh: Script to install Server HUD in development mode.
+    * Makefile: Builds the Python package.
+    * Manifest.in: Added to also install non python files.
+    * README.md: Updated.
+    * README.rst: Description for the Python package.
+    * setup.py: Added with packaging information.
+    * version: Added with package version.
+    * Moved all Python code into serverhud/
+    * Added entry points in scripts/
+    * Added full system test in tests/full-sys
+    * Added systemd service files in systemsd/
+    * Client:
+	   * Get configuration file from environment variable.
+	   * Remove probe code that is now handled by the WebSocker server.
+
+
 2015-08-13  oblivion  <oblivion@case>
 
 	* app/__init__.py: Logging using flask.

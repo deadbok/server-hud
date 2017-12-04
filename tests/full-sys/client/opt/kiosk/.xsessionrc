@@ -1,0 +1,15 @@
+#Disable screen power saving
+sleep 1; xset s off -dpms
+#Enbale screen power and saving.
+#xset s on
+#xset s 1800
+#xset +dpms
+#Start Window Manager
+matchbox-window-manager &
+#Update files in /home/kiosk and start chromium
+while true; do
+	rsync -qr --delete --exclude='.Xauthority' /opt/kiosk/ $HOME/
+	chromium http://localhost:5000
+	sleep 30
+	curl http://serverhud-webserver/
+done

@@ -1,0 +1,2 @@
+graft serverhud/app/static
+graft serverhud/app/templates 
