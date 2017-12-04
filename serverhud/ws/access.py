@@ -46,7 +46,7 @@ class AccessHandler(FileSystemEventHandler):
                 self.accesses += line_number
             self.lastline = line
         except FileNotFoundError:
-            logging.exception("Could not open HTTPd access log.")
+            logger.exception("Could not open HTTPd access log.")
             self.accesses = -1
 
     def on_modified(self, event):

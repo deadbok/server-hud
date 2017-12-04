@@ -29,7 +29,7 @@ class WebSocketremote_hostHandler(tornado.websocket.WebSocketHandler):
         self.ip_addr = "0.0.0.0"
 
     def send(self, data):
-        if data == "":
+        if data['lastline'] == "":
             logger.info("No host found in access log.")
             self.write_message(json.dumps({"remote_host": "none"}))
         else:

@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
             vb.memory = "256"
         end
         shf.vm.provision "file", source: "firewall/config.py", destination: "config.py", run: "always"
-        shf.vm.provision "shell", run: "always", path: "scripts/firewall.sh", name: "Install firewall"
+        shf.vm.provision "shell", path: "scripts/firewall.sh", name: "Install firewall"
         shf.vm.provision "shell", run: "always", path: "scripts/serverhud-server.sh", name: "Install serverhud server service"
     end
 
@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
         end
         shw.vm.provision "file", source: "webserver/etc", destination: "etc", run: "always"
         shw.vm.provision "file", source: "webserver/config.py", destination: "config.py", run: "always"
-        shw.vm.provision "shell", run: "always", path: "scripts/webserver.sh", name: "Install webserver"
+        shw.vm.provision "shell", path: "scripts/webserver.sh", name: "Install webserver"
         shw.vm.provision "shell", run: "always", path: "scripts/serverhud-server.sh", name: "Install serverhud server service"
      end
 
@@ -52,9 +52,9 @@ Vagrant.configure("2") do |config|
         shc.vm.provision "file", source: "client/config.py", destination: "config.py", run: "always"
         shc.vm.provision "file", source: "client/etc", destination: "etc", run: "always"
         shc.vm.provision "file", source: "client/opt", destination: "opt", run: "always"
-        shc.vm.provision "shell", run: "always", path: "scripts/non-free-firmware.sh", name: "Install non free firmware"
-        shc.vm.provision "shell", run: "always", path: "scripts/bootsplash.sh", name: "Setup boot splash"
-        shc.vm.provision "shell", run: "always", path: "scripts/browser.sh", name: "Install browser"
+        shc.vm.provision "shell", path: "scripts/non-free-firmware.sh", name: "Install non free firmware"
+        shc.vm.provision "shell", path: "scripts/bootsplash.sh", name: "Setup boot splash"
+        shc.vm.provision "shell", path: "scripts/browser.sh", name: "Install browser"
         shc.vm.provision "shell", run: "always", path: "scripts/serverhud-client.sh", name: "Install serverhud client service"
         shc.vm.provision "shell", run: "always", path: "scripts/kiosk.sh", name: "Setup kiosk mode for user serverhud"
         shc.vm.provision "shell", run: "always", name: "Reboot client machine",

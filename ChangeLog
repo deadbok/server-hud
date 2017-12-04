@@ -1,3 +1,9 @@
+2015-12-04  oblivion  <oblivion@linda_lee>
+
+	* serverhud/ws/access.py: Better logging and error handling.
+	* serverhud/ws/remote_host.py: Better logging and error handling.
+	* tests/full-sys/Vagrantfile: Stop some provisioning step from running each time.
+
 2015-12-03  oblivion  <oblivion@linda_lee>
 
 	* .gitignore: Simplify.
