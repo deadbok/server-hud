@@ -27,8 +27,8 @@ class WebSocketaccessesHandler(tornado.websocket.WebSocketHandler):
 
     def send(self, data):
         logger.debug("Sending: " +
-                     json.dumps({ "accesses": data['accesses'] }))
-        self.write_message(json.dumps({ "accesses": data['accesses'] }))
+                     json.dumps({"accesses": data['accesses']}))
+        self.write_message(json.dumps({"accesses": data['accesses']}))
 
     def open(self):
         global HANDLER, OBSERVER
@@ -38,7 +38,8 @@ class WebSocketaccessesHandler(tornado.websocket.WebSocketHandler):
             HANDLER[self.path] = AccessHandler(handler=getattr(self, 'send'))
             OBSERVER[self.path] = Observer()
             logger.info("Watching: " + self.path)
-            OBSERVER[self.path].schedule(HANDLER[self.path], self.path, recursive=True)
+            OBSERVER[self.path].schedule(HANDLER[self.path], self.path,
+                                         recursive=True)
             try:
                 OBSERVER[self.path].start()
             except OSError:
@@ -46,12 +47,12 @@ class WebSocketaccessesHandler(tornado.websocket.WebSocketHandler):
                 self.close()
                 return
         self.observer = True
-        self.send({ "accesses": HANDLER[self.path].accesses })
+        self.send({"accesses": HANDLER[self.path].accesses})
 
     def on_message(self, message):
         global HANDLER
 
-        self.send({ "accesses": HANDLER[self.path].accesses })
+        self.send({"accesses": HANDLER[self.path].accesses})
 
     def on_close(self):
         global HANDLER, OBSERVER
@@ -69,4 +70,4 @@ class WebSocketaccessesHandler(tornado.websocket.WebSocketHandler):
                 self.observer = False
 
     def check_origin(self, origin):
-        return True
+        return ws.origin_allowed(origin)

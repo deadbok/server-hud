@@ -54,19 +54,31 @@ class WebSocketconnectionsHandler(tornado.websocket.WebSocketHandler):
         if old != self.connections:
             # Send the new data.
             if self.connected:
-                logger.debug(json.dumps({ "connections": self.get_connections() }))
-                self.write_message(json.dumps({ "connections": self.get_connections() }))
+                logger.debug(json.dumps({
+                    "connections": self.get_connections()
+                    }))
+                self.write_message(json.dumps({
+                    "connections": self.get_connections()
+                    }))
 
     def open(self):
-        logger.debug(json.dumps({ "connections": self.get_connections() }))
-        self.write_message(json.dumps({ "connections": self.get_connections() }))
+        logger.debug(json.dumps({
+            "connections": self.get_connections()
+            }))
+        self.write_message(json.dumps({
+            "connections": self.get_connections()
+            }))
         # We have a WebSocket connection
         self.connected = True
         self.periodic_callback.start()
 
     def on_message(self, message):
-        logger.debug(json.dumps({ "connections": self.get_connections() }))
-        self.write_message(json.dumps({ "connections": self.get_connections() }))
+        logger.debug(json.dumps({
+            "connections": self.get_connections()
+            }))
+        self.write_message(json.dumps({
+            "connections": self.get_connections()
+            }))
 
     def on_close(self):
         logger.debug("Connection closed")
@@ -75,4 +87,4 @@ class WebSocketconnectionsHandler(tornado.websocket.WebSocketHandler):
         self.periodic_callback.stop()
 
     def check_origin(self, origin):
-        return True
+        return ws.origin_allowed(origin)

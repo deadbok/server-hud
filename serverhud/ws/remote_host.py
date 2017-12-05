@@ -89,4 +89,4 @@ class WebSocketremote_hostHandler(tornado.websocket.WebSocketHandler):
                 self.observer = False
 
     def check_origin(self, origin):
-        return True
+        return ws.origin_allowed(origin)

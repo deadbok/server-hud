@@ -1,3 +1,8 @@
+2015-12-06  oblivion  <oblivion@linda_lee>
+
+	* serverhud/ws: Origin check is back.
+	* tests/full-sys: Configured for origin check.
+
 2015-12-04  oblivion  <oblivion@linda_lee>
 
 	* serverhud/ws/access.py: Better logging and error handling.

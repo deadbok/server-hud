@@ -4,6 +4,7 @@ import os
 import types
 import json
 import tornado.websocket
+from urllib.parse import urlparse
 from tornado.options import options
 
 from serverhud.ws import config
@@ -45,3 +46,14 @@ def init():
     app = tornado.web.Application(handlers=handlers, autoreload=True)
 
     return app
+
+
+def origin_allowed(origin):
+    '''
+    Check if an origin from a request is allowed access.
+    '''
+    host = urlparse(origin).netloc
+    if host in config.CONFIG['ALLOWED']:
+        return(True)
+
+    return(False)

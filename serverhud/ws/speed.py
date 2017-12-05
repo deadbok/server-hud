@@ -142,4 +142,4 @@ class WebSocketspeedHandler(tornado.websocket.WebSocketHandler):
         self.periodic_callback.stop()
 
     def check_origin(self, origin):
-        return True
+        return ws.origin_allowed(origin)

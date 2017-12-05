@@ -65,4 +65,4 @@ class WebSocketuptimeHandler(tornado.websocket.WebSocketHandler):
         self.connected = False
 
     def check_origin(self, origin):
-        return True
+        return ws.origin_allowed(origin)

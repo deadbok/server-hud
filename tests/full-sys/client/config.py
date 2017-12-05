@@ -7,6 +7,9 @@ from socket import getfqdn, gethostname
 SERVER_FIREWALL = 'ws://serverhud-firewall:5000'
 SERVER_WEBSERVER = 'ws://serverhud-webserver:5000'
 
+# List of allowed host.
+ALLOWED = [getfqdn() + ':5000', gethostname() + ':5000', 'localhost:5000']
+
 # Dictionary of hosts for the panels on the web page.
 HOSTS = {'web_connections': SERVER_WEBSERVER,
          'web_remote_host': SERVER_WEBSERVER,
