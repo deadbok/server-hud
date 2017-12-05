@@ -7,9 +7,9 @@ sleep 1; xset s off -dpms
 #Start Window Manager
 matchbox-window-manager &
 #Update files in /home/kiosk and start chromium
+rsync -qr --delete --exclude='.Xauthority' /opt/kiosk/ $HOME/
+chromium http://localhost:5000 &
 while true; do
-	rsync -qr --delete --exclude='.Xauthority' /opt/kiosk/ $HOME/
-	chromium http://localhost:5000
 	sleep 30
 	curl http://serverhud-webserver/
 done
