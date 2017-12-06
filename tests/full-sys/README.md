@@ -6,4 +6,3 @@ Test that brings up a full virtual environment to test the application
 
  * Vagrant:
     * vagrant-hostmanager
-    * vagrant-reload

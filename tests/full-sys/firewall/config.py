@@ -4,7 +4,7 @@
 '''
 from socket import getfqdn, gethostname
 
-CLIENT = 'serverhud-client'
+CLIENT = 'serverhud-client:5000'
 
 # Process to use when calculating uptime.
 PROCESS_NAME = "lighttpd"

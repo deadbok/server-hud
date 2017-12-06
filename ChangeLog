@@ -2,6 +2,7 @@
 
 	* serverhud/ws: Origin check is back.
 	* tests/full-sys: Configured for origin check.
+	* tests/full-sys: Update README
 
 2015-12-04  oblivion  <oblivion@linda_lee>
 
