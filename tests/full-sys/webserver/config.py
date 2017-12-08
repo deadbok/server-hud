@@ -19,6 +19,9 @@ DEBUG = True
 # List of enabled services on this instance.
 WS_SERVICES = ['connections', 'uptime', 'remote_host', 'accesses']
 # List of allowed host.
-ALLOWED = [getfqdn() + ':5000', gethostname() + ':5000', 'localhost:5000', CLIENT]
+ALLOWED = [getfqdn() + ':5000',
+           gethostname() + ':5000',
+           'localhost:5000',
+           CLIENT]
 
 SERVER_LOG_FILE = '/home/serverhud/server.log'

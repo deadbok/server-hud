@@ -1,3 +1,7 @@
+2015-12-08  oblivion  <oblivion@linda_lee>
+
+	* roles/: Add Ansible install role
+
 2015-12-06  oblivion  <oblivion@linda_lee>
 
 	* serverhud/ws: Origin check is back.

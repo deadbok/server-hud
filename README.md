@@ -15,6 +15,7 @@ inherit security at all.**
 
  * `dist`: Python packages.
  * `docs`: Documentation.
+ * `roles`: Ansible roles to install server hud.
  * `scripts`: Entry points for the client and server.
  * `serverhud`: The Server HUD python source.
  * `systemd`: Systemd service files.
