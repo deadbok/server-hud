@@ -41,14 +41,14 @@ setup(
     license='GNU General Public License v2 (GPLv2)',
 
     # Include the library package.
-    packages=['serverhud.app', 'serverhud.ws'],
+    packages=['serverhud.ws'],
 
-    scripts=['scripts/serverhud-client', 'scripts/serverhud-server'],
+    scripts=['scripts/serverhud-server'],
 
     include_package_data=True,
 
     # The package requirements.
-    install_requires=['Flask', 'tornado', 'watchdog', 'psutil'],
+    install_requires=['tornado', 'watchdog', 'psutil'],
 
     # We want a version equal to or newer that Python 3.
     python_requires='>=3',

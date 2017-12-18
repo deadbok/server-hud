@@ -4,3 +4,6 @@
 [submodule "roles/ansible-debian-midori-kiosk"]
 	path = roles/ansible-debian-midori-kiosk
 	url = https://github.com/deadbok/ansible-debian-midori-kiosk
+[submodule "serverhud/app"]
+	path = serverhud/app
+	url = https://github.com/deadbok/serverhud-client

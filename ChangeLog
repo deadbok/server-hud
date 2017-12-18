@@ -1,5 +1,9 @@
 2015-12-18  oblivion  <oblivion@linda_lee>
 
+	* v6.0
+	* Move client to separate
+	* Remove client from Python package
+
     * v5.2
 	* test/full-sys: Use Ansible for provosioning
 
