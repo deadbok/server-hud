@@ -1,0 +1,25 @@
+---
+serverhud_install_client: true
+serverhud_install_server: false
+
+serverhud_allowed:
+    - "{{ ansible_host }}:5000"
+    - "{{ ansible_fqdn }}:5000"
+    - "{{ ansible_hostname }}:5000"
+    - "localhost:5000"
+
+serverhud_client_host:
+    web_connections: "ws://serverhud-webserver:5000"
+    web_remote_host: "ws://serverhud-webserver:5000"
+    web_uptime: "ws://serverhud-webserver:5000"
+    web_accesses: "ws://serverhud-webserver:5000"
+    fw_connections:  "ws://serverhud-firewall:5000"
+    fw_speed: "ws://serverhud-firewall:5000"
+
+autologin_user: "serverhud"
+autologin_group: "serverhud"
+
+kiosk_user_home_dir: "/opt/serverhud"
+kiosk_url: "http://localhost:5000"
+
+grub2_stable_netnames: false

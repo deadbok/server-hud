@@ -1,0 +1,25 @@
+---
+serverhud_install_client: false
+serverhud_install_server: true
+
+serverhud_allowed:
+    - "{{ ansible_host }}:5000"
+    - "{{ ansible_fqdn }}:5000"
+    - "{{ ansible_hostname }}:5000"
+    - "localhost:5000"
+    - "serverhud-client:5000"
+
+serverhud_server_process: "lighttpd"
+
+serverhud_server_access: "/var/log/lighttpd/access.log"
+
+serverhud_server_interface:
+
+serverhud_server_ports:
+    - "80"
+
+serverhud_server_services:
+    - "connections"
+    - "uptime"
+    - "remote_host"
+    - "accesses"

@@ -6,67 +6,73 @@ Vagrant.configure("2") do |config|
     config.hostmanager.ignore_private_ip = false
     config.hostmanager.include_offline = true
 
-    serverhud_version = "0.5.0"
+    vagrant_root = File.dirname(__FILE__)
+    ENV['ANSIBLE_ROLES_PATH'] = "#{vagrant_root}/../../roles"
+
+    serverhud_version = "0.5.2"
+
+    vms = [
+        {
+            :name => 'serverhud-firewall',
+            :private_ip => "192.168.50.2",
+            :private_net_name => "server-hud",
+            :memory => 256,
+            :gui => false,
+            :host_vars_file => "firewall.yml"
+        },
+        {
+            :name => 'serverhud-webserver',
+            :private_ip => "192.168.50.3",
+            :private_net_name => "server-hud",
+            :memory => 512,
+            :gui => false,
+            :host_vars_file => "webserver.yml"
+        },
+        {
+            :name => 'serverhud-client',
+            :private_ip => "192.168.50.4",
+            :private_net_name => "server-hud",
+            :memory => 1024,
+            :gui => true,
+            :host_vars_file => "client.yml"
+        }
+    ]
+
+    vms.each do |machine_def|
+        config.vm.define machine_def[:name] do |machine|
+            machine.vm.hostname = machine_def[:name]
+
+            machine.vm.provision "ansible", run: "always" do |ansible|
+                ansible.playbook = "test.yml"
+                ansible.compatibility_mode = "2.0"
+            #    ansible.verbose = "-vvv"
+                dir = File.dirname(File.expand_path(__FILE__))
+                ansible.extra_vars = "#{dir}/host_vars/#{machine_def[:host_vars_file]}"
+                ansible.groups = {
+                    "client" => ["serverhud-client"],
+                    "webserver" => ["serverhud-webserver"],
+                    "firewall" => ["serverhud-firewall"]
+                }
+            end
 
 
-    config.vm.define "serverhud-firewall" do |shf|
-        shf.vm.box = "debian/stretch64"
-        shf.vm.host_name = "serverhud-firewall"
-        shf.vm.network "private_network",
-                       ip: "192.168.50.2",
-                       virtualbox__intnet: "server-hud"
-        shf.vm.provider "virtualbox" do |vb|
-            vb.memory = "256"
+
+            # Reboot the client when done installing.
+            if machine_def[:name] == "serverhud-client"
+                machine.vm.provision "shell", run: "always", name: "Reboot client machine",
+                    inline: "systemctl enable serverhud-client && reboot"
+            end
+
+            machine.vm.network "private_network",
+                               ip: machine_def[:private_ip],
+                               virtualbox__intnet: machine_def[:private_net_name]
+
+            machine.vm.provider "virtualbox" do |vb|
+                vb.memory = machine_def[:memory]
+                vb.gui = machine_def[:gui]
+            end
+
+
         end
-        shf.vm.provision "file", source: "firewall/config.py", destination: "config.py", run: "always"
-        shf.vm.provision "shell", path: "scripts/firewall.sh", name: "Install firewall"
-        shf.vm.provision "shell", run: "always", path: "scripts/serverhud-server.sh", name: "Install serverhud server service"
-    end
-
-    config.vm.define "serverhud-webserver" do |shw|
-        shw.vm.box = "debian/stretch64"
-        shw.vm.host_name = "serverhud-webserver"
-        shw.vm.network "private_network",
-                       ip: "192.168.50.3",
-                       virtualbox__intnet: "server-hud"
-        shw.vm.provider "virtualbox" do |vb|
-            vb.memory = "512"
-        end
-        shw.vm.provision "file", source: "webserver/config.py", destination: "config.py", run: "always"
-        shw.vm.provision "shell", path: "scripts/webserver.sh", name: "Install webserver"
-        shw.vm.provision "shell", run: "always", path: "scripts/serverhud-server.sh", name: "Install serverhud server service"
-     end
-
-    config.vm.define "serverhud-client" do |shc|
-        shc.vm.box = "debian/stretch64"
-        shc.vm.host_name = "serverhud-client"
-        shc.vm.network "private_network",
-                       ip: "192.168.50.4",
-                       virtualbox__intnet: "server-hud"
-        shc.vm.network "forwarded_port", guest: 5000, host: 5000
-        shc.vm.provider "virtualbox" do |vb|
-            vb.gui = true
-            vb.memory = "1024"
-        end
-        shc.vm.provision "file", source: "client/config.py", destination: "config.py", run: "always"
-        shc.vm.provision "file", source: "client/etc", destination: "etc", run: "always"
-        shc.vm.provision "file", source: "client/opt", destination: "opt", run: "always"
-        shc.vm.provision "shell", path: "scripts/non-free-firmware.sh", name: "Install non free firmware"
-        shc.vm.provision "shell", path: "scripts/bootsplash.sh", name: "Setup boot splash"
-        shc.vm.provision "shell", path: "scripts/browser.sh", name: "Install browser"
-        shc.vm.provision "shell", run: "always", path: "scripts/serverhud-client.sh", name: "Install serverhud client service"
-        shc.vm.provision "shell", run: "always", path: "scripts/kiosk.sh", name: "Setup kiosk mode for user serverhud"
-        shc.vm.provision "shell", run: "always", name: "Reboot client machine",
-            inline: "reboot"
-    end
-
-    config.vm.provision "file", source: "../../dist/serverhud-#{serverhud_version}-py3-none-any.whl", destination: "serverhud-#{serverhud_version}-py3-none-any.whl", run: "always"
-    config.vm.provision "file", source: "../../systemd/serverhud-client.service", destination: "serverhud-client.service", run: "always"
-    config.vm.provision "file", source: "../../systemd/serverhud-server.service", destination: "serverhud-server.service", run: "always"
-    config.vm.provision "shell", path: "scripts/serverhud-user.sh", name: "Setup serverhud user"
-    config.vm.provision "shell", run: "always" do |s|
-        s.path = "scripts/serverhud-install.sh"
-        s.args   = "#{serverhud_version}"
-        s.name = "Install serverhud using pip"
     end
 end

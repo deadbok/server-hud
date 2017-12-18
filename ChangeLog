@@ -1,6 +1,13 @@
+2015-12-18  oblivion  <oblivion@linda_lee>
+
+    * v5.2
+	* test/full-sys: Use Ansible for provosioning
+
 2015-12-08  oblivion  <oblivion@linda_lee>
 
-	* roles/: Add Ansible install role
+	* roles/: Add Ansible server hud install role
+	* roles/: Add Ansible lighttpd install role
+	* roles/: Add Ansiblel role to run Midori in kiosk mode
 
 2015-12-06  oblivion  <oblivion@linda_lee>
 

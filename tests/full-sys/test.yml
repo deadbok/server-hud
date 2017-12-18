@@ -1,0 +1,14 @@
+---
+- hosts: client
+  roles:
+    - ansible-serverhud
+    - ansible-debian-midori-kiosk
+
+- hosts: webserver
+  roles:
+    - ansible-debian-lighttpd
+    - ansible-serverhud
+
+- hosts: firewall
+  roles:
+    - ansible-serverhud

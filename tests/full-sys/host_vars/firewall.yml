@@ -1,0 +1,23 @@
+---
+serverhud_install_client: false
+serverhud_install_server: true
+
+serverhud_allowed:
+    - "{{ ansible_host }}:5000"
+    - "{{ ansible_fqdn }}:5000"
+    - "{{ ansible_hostname }}:5000"
+    - "localhost:5000"
+    - "serverhud-client:5000"
+
+serverhud_server_process:
+
+serverhud_server_access:
+
+serverhud_server_interface: 'eth0'
+
+serverhud_server_ports:
+    - "all"
+
+serverhud_server_services:
+    - "connections"
+    - "speed"

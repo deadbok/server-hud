@@ -11,3 +11,5 @@ __pycache__/
 # Python packaging
 *.egg-info
 build/
+
+*.retry
