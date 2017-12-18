@@ -1,3 +1,6 @@
 [submodule "roles/ansible-debian-lighttpd"]
 	path = roles/ansible-debian-lighttpd
 	url = https://github.com/deadbok/ansible-debian-lighttpd
+[submodule "roles/ansible-debian-midori-kiosk"]
+	path = roles/ansible-debian-midori-kiosk
+	url = https://github.com/deadbok/ansible-debian-midori-kiosk
