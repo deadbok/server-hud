@@ -1,3 +1,6 @@
+[submodule "roles/ansible-serverhud"]
+	path = roles/ansible-serverhud
+	url = https://github.com/deadbok/ansible-serverhud
 [submodule "roles/ansible-debian-lighttpd"]
 	path = roles/ansible-debian-lighttpd
 	url = https://github.com/deadbok/ansible-debian-lighttpd
