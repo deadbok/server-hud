@@ -11,11 +11,8 @@ PACKAGE_PLATFORM:=py3-none-any
 PACKAGE_FILE:=dist/$(PACKAGE_NAME)-$(PACKAGE_VERSION)-$(PACKAGE_PLATFORM).whl
 
 # Source files that the package depends on
-SRC:=Makefile setup.py version MANIFEST.in $(wildcard serverhud/*) \
-	$(wildcard serverhud/app/*) $(wildcard serverhud/static/*) \
-	$(wildcard serverhud/static/css/*) $(wildcard serverhud/static/js/*) \
-	$(wildcard serverhud/templates/*) $(wildcard serverhud/ws/*) \
-	$(wildcard scripts/ws/*)
+SRC:=Makefile setup.py version MANIFEST.in $(wildcard serverhud/ws/*) \
+	$(wildcard scripts/*)
 
 # Build all rule, only builds the package
 all: $(PACKAGE_FILE)
