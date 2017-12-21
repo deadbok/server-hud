@@ -4,19 +4,20 @@
 '''
 import json
 import psutil
-
+import logging
 import tornado.websocket
 import tornado.ioloop
 from tornado.ioloop import PeriodicCallback
 
 from serverhud import ws
-from serverhud.ws.log import logger
+from serverhud.ws import logger
 
 
 class WebSocketconnectionsHandler(tornado.websocket.WebSocketHandler):
 
     def __init__(self, *args, **kwargs):
-        logger.debug("Creating WebSocket connections handler")
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("Creating WebSocket connections handler")
         super(WebSocketconnectionsHandler, self).__init__(*args, **kwargs)
         # No WebSocket connection yet
         self.connected = False
@@ -25,7 +26,8 @@ class WebSocketconnectionsHandler(tornado.websocket.WebSocketHandler):
         # Update the connection count
         self.update()
         # Setup periodic callback via Tornado
-        self.periodic_callback = PeriodicCallback(getattr(self, 'update'), 1000)
+        self.periodic_callback = PeriodicCallback(getattr(self, 'update'),
+                                                  1000)
 
     def get_connections(self):
         self.connections = 0
@@ -54,7 +56,7 @@ class WebSocketconnectionsHandler(tornado.websocket.WebSocketHandler):
         if old != self.connections:
             # Send the new data.
             if self.connected:
-                logger.debug(json.dumps({
+                self.logger.debug(json.dumps({
                     "connections": self.get_connections()
                     }))
                 self.write_message(json.dumps({
@@ -62,7 +64,7 @@ class WebSocketconnectionsHandler(tornado.websocket.WebSocketHandler):
                     }))
 
     def open(self):
-        logger.debug(json.dumps({
+        self.logger.debug(json.dumps({
             "connections": self.get_connections()
             }))
         self.write_message(json.dumps({
@@ -73,7 +75,7 @@ class WebSocketconnectionsHandler(tornado.websocket.WebSocketHandler):
         self.periodic_callback.start()
 
     def on_message(self, message):
-        logger.debug(json.dumps({
+        self.logger.debug(json.dumps({
             "connections": self.get_connections()
             }))
         self.write_message(json.dumps({
@@ -81,7 +83,7 @@ class WebSocketconnectionsHandler(tornado.websocket.WebSocketHandler):
             }))
 
     def on_close(self):
-        logger.debug("Connection closed")
+        self.logger.debug("Connection closed")
         # We no longer have a WebSocket connection.
         self.connected = False
         self.periodic_callback.stop()

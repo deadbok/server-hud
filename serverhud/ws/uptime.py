@@ -5,11 +5,11 @@
 import json
 import psutil
 from datetime import datetime
-
+import logging
 import tornado.websocket
 from tornado.ioloop import PeriodicCallback
 
-from serverhud.ws.log import logger
+from serverhud.ws import logger
 from serverhud import ws
 
 HANDLER = None

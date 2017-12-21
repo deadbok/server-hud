@@ -6,7 +6,7 @@ Get current transfer rate on an interface.
 '''
 import json
 import psutil
-
+import logging
 from datetime import datetime
 
 import tornado.websocket
@@ -14,7 +14,7 @@ import tornado.ioloop
 from tornado.ioloop import PeriodicCallback
 
 from serverhud import ws
-from serverhud.ws.log import logger
+from serverhud.ws import logger
 
 
 class WebSocketspeedHandler(tornado.websocket.WebSocketHandler):
@@ -46,8 +46,9 @@ class WebSocketspeedHandler(tornado.websocket.WebSocketHandler):
                 print(interfaces)
                 now = datetime.now()
 
-                total_bytes_recv = interfaces[ws.config.CONFIG['INTERFACE']].bytes_recv
-                total_bytes_sent = interfaces[ws.config.CONFIG['INTERFACE']].bytes_sent
+                interface = ws.config.CONFIG['INTERFACE']
+                total_bytes_recv = interfaces[interface].bytes_recv
+                total_bytes_sent = interfaces[interface].bytes_sent
             except KeyError:
                 logger.error("Interface not found.")
 

@@ -1,4 +1,9 @@
 2015-12-19  oblivion  <oblivion@linda_lee>
+
+	* Rework loggin in the server.
+
+2015-12-19  oblivion  <oblivion@linda_lee>
+
 	* Fix Makefile dependencies
 	* Add more debugging to the server
 

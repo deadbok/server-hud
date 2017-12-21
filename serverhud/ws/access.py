@@ -4,10 +4,11 @@
 '''
 import json
 import os.path
+import logging
 
 from serverhud import ws
 
-from serverhud.ws.log import logger
+from serverhud.ws import logger
 
 from watchdog.events import FileSystemEventHandler
 
@@ -16,25 +17,26 @@ class AccessHandler(FileSystemEventHandler):
     instances = 0
 
     def __init__(self, handler, *args, **kwargs):
-        logger.debug("Creating WebSocket file access handler")
+        self.logger = logging(__name__)
+        self.logger.debug("Creating WebSocket file access handler")
         super(AccessHandler, self).__init__(*args, **kwargs)
         self.handlers = [handler]
         self.accesses = 0
         self.lastline = ""
         AccessHandler.instances += 1
-        logger.debug(str(AccessHandler.instances) + " active handlers")
+        self.logger.debug(str(AccessHandler.instances) + " active handlers")
         self.id = AccessHandler.instances
         self.read_access_log()
 
     def handle(self, data):
-        logger.debug("(" + str(self.id) + ") Handling: " + str(data))
+        self.logger.debug("(" + str(self.id) + ") Handling: " + str(data))
         for handler in self.handlers:
-            logger.debug("(" + str(self.id) + ") Calling handler")
+            self.logger.debug("(" + str(self.id) + ") Calling handler")
             handler(data)
 
     def read_access_log(self):
         # Count number of lines
-        logger.debug("(" + str(self.id) + ") Reading log file.")
+        self.logger.debug("(" + str(self.id) + ") Reading log file.")
         try:
             with open(ws.config.CONFIG['ACCESS_LOG']) as log_file:
                 for line_number, line in enumerate(log_file, 1):
@@ -46,12 +48,12 @@ class AccessHandler(FileSystemEventHandler):
                 self.accesses += line_number
             self.lastline = line
         except FileNotFoundError:
-            logger.exception("Could not open HTTPd access log.")
+            self.logger.exception("Could not open HTTPd access log.")
             self.accesses = -1
 
     def on_modified(self, event):
         filename = os.path.basename(event.src_path)
-        logger.debug("(" + str(self.id) + ") Access: " + filename)
+        self.logger.debug("(" + str(self.id) + ") Access: " + filename)
         if (filename == os.path.basename(ws.config.CONFIG['ACCESS_LOG'])):
             self.read_access_log()
 
@@ -64,4 +66,4 @@ class AccessHandler(FileSystemEventHandler):
         if handler in self.handlers:
             self.handlers.remove(handler)
         AccessHandler.instances -= 1
-        logger.debug(str(AccessHandler.instances) + " active handlers")
+        self.logger.debug(str(AccessHandler.instances) + " active handlers")
