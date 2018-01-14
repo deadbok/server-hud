@@ -26,3 +26,7 @@ inherit security at all.**
  * `README.rst`: Python package description.
  * `setup.py`: Packaging information
  * `version`: Package version
+
+## Dependencies
+
+Needs ansible **version 2.4** or newer.

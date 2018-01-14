@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
     vagrant_root = File.dirname(__FILE__)
     ENV['ANSIBLE_ROLES_PATH'] = "#{vagrant_root}/../../roles"
 
-    serverhud_version = "0.5.2"
+    serverhud_version = "0.6.0"
 
     vms = [
         {
@@ -44,8 +44,8 @@ Vagrant.configure("2") do |config|
 
             machine.vm.provision "ansible", run: "always" do |ansible|
                 ansible.playbook = "test.yml"
-                ansible.compatibility_mode = "2.0"
-            #    ansible.verbose = "-vvv"
+                #ansible.compatibility_mode = "2.0"
+                #ansible.verbose = "-vv"
                 dir = File.dirname(File.expand_path(__FILE__))
                 ansible.extra_vars = "#{dir}/host_vars/#{machine_def[:host_vars_file]}"
                 ansible.groups = {
@@ -55,12 +55,13 @@ Vagrant.configure("2") do |config|
                 }
             end
 
-
-
             # Reboot the client when done installing.
             if machine_def[:name] == "serverhud-client"
-                machine.vm.provision "shell", run: "always", name: "Reboot client machine",
-                    inline: "systemctl enable serverhud-client && reboot"
+                machine.vm.provision :shell, run: "always", name: "Reboot client machine" do |s|
+                    s.inline = <<-SHELL
+                        reboot
+                    SHELL
+                end
             end
 
             machine.vm.network "private_network",
@@ -71,8 +72,6 @@ Vagrant.configure("2") do |config|
                 vb.memory = machine_def[:memory]
                 vb.gui = machine_def[:gui]
             end
-
-
         end
     end
 end

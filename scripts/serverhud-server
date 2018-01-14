@@ -4,6 +4,7 @@
 :author: oblivion
 '''
 import os
+import sys
 import logging
 import tornado.httpserver
 import tornado.websocket
@@ -12,9 +13,7 @@ import tornado.web
 from tornado.options import define, options
 
 from serverhud import ws
-
 from serverhud.ws.config import init_config
-from serverhud.ws.log import logger, init_file_log, init_console_log, close_log
 
 
 define("debug", default=False, help="Log debug information", type=bool)
@@ -27,19 +26,42 @@ if __name__ == "__main__":
     tornado.options.parse_command_line()
     init_config(options.config)
     # Init logging to file
-    if options.debug:
-        init_file_log(logging.DEBUG, ws.config.CONFIG['SERVER_LOG_FILE'])
+
+    # Create a file logger with rollover
+    file_log = logging.handlers.RotatingFileHandler(
+        ws.config.CONFIG['SERVER_LOG_FILE'],
+        maxBytes=10000000,
+        backupCount=5)
+    file_log.setFormatter(
+        logging.Formatter('%(asctime)s - %(filename)s -' +
+                          ' %(funcName)s - %(levelname)s: ' +
+                          '%(message)s'))
+    file_log.doRollover()
+
+    # Create a console logger
+    console_log = logging.StreamHandler(sys.stdout)
+    console_log.setLevel(logging.INFO)
+
+    root_logger = logging.getLogger()
+    root_logger.addHandler(console_log)
+    root_logger.addHandler(file_log)
+    root_logger.setLevel(logging.INFO)
+
+    if options.debug or ws.config.CONFIG['DEBUG']:
+        root_logger.setLevel(logging.DEBUG)
+        file_log.setLevel(logging.DEBUG)
     else:
-        init_file_log(logging.INFO, ws.config.CONFIG['SERVER_LOG_FILE'])
+        root_logger.setLevel(logging.INFO)
+        file_log.setLevel(logging.INFO)
 
     # init_file_log(logging.DEBUG)
 
     app = ws.init()
-    logger.info("server-hud WebSocket server")
-    if options.debug:
-        logger.info('Debugging enabled')
+    logging.info("server-hud WebSocket server")
+    if options.debug or ws.config.CONFIG['DEBUG']:
+        logging.info('Debugging enabled')
     http_server = tornado.httpserver.HTTPServer(app)
     http_server.listen(options.port)
-    logger.info("Listening on port: " + str(options.port))
+    root_logger.info("Listening on port: " + str(options.port))
 
     tornado.ioloop.IOLoop.instance().start()

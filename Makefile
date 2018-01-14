@@ -15,8 +15,14 @@ SRC:=Makefile setup.py version MANIFEST.in $(wildcard serverhud/ws/*) \
 	$(wildcard scripts/*)
 
 # Build all rule, only builds the package
-all: $(PACKAGE_FILE)
+all: $(PACKAGE_FILE) version.yml
 
 # Actual rule that builds a new package.
 $(PACKAGE_FILE): $(SRC)
-		python3 setup.py bdist_wheel
+		rm -rf build
+		python3 setup.py sdist bdist_wheel
+
+# Put version information in a YAML file for Ansible.
+version.yml: version
+		echo 'serverhud_version: "$(PACKAGE_VERSION)"' > version.yml
+		echo 'serverhud_arch: "$(PACKAGE_PLATFORM)"' >> version.yml

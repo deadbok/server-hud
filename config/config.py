@@ -16,12 +16,12 @@ INTERFACE = "wlp2s0"
 # Port to scan for number of connections
 PORT = '80'
 # Debug logging.
-DEBUG = True
+DEBUG = False
 # List of enabled services on this instance.
 WS_SERVICES = [ 'connections', 'speed', 'uptime',
             'remote_host', 'accesses' ]
 # List of allowed host.
-ALLOWED = [getfqdn() + ':5000', gethostname() + ':5000']
+ALLOWED = [getfqdn() + ':5000', gethostname() + ':5000', 'localhost']
 # Dictionary of hosts for the panels on the web page.
 HOSTS = {'web_connections': SERVER_STRAYLIGHT,
          'web_remote_host': SERVER_STRAYLIGHT,

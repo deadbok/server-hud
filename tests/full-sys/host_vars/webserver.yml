@@ -2,12 +2,17 @@
 serverhud_install_client: false
 serverhud_install_server: true
 
+serverhud_version: "0.6.0"
+serverhud_arch: "py3-none-any"
+
 serverhud_allowed:
     - "{{ ansible_host }}:5000"
     - "{{ ansible_fqdn }}:5000"
     - "{{ ansible_hostname }}:5000"
     - "localhost:5000"
-    - "serverhud-client:5000"
+    - "localhost"
+    - "serverhud-client:80"
+    - "192.168.50.4:80"
 
 serverhud_server_process: "lighttpd"
 
@@ -23,3 +28,6 @@ serverhud_server_services:
     - "uptime"
     - "remote_host"
     - "accesses"
+
+serverhud_pip_uri: "../../dist/serverhud-{{ serverhud_version }}-{{ serverhud_arch }}.whl"
+serverhud_pip_local: true

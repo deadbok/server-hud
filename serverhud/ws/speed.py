@@ -39,7 +39,7 @@ class WebSocketspeedHandler(tornado.websocket.WebSocketHandler):
     def update(self):
         if self.connected:
             logger.debug("Get average incoming speed for: " +
-                         CONFIG['INTERFACE'])
+                         ws.config.CONFIG['INTERFACE'])
 
             try:
                 interfaces = psutil.net_io_counters(True)
@@ -93,32 +93,37 @@ class WebSocketspeedHandler(tornado.websocket.WebSocketHandler):
                     sent_bytes = total_bytes_sent - self.last_bytes['send']
                     logger.debug("Bytes sent: " + str(sent_bytes) + " bytes.")
                     speed = (sent_bytes / time[1]) / 1024
-                    logger.debug("Sampled send speed: " + str(speed) + "KiB/s.")
+                    logger.debug("Sampled send speed: " + str(speed) +
+                                 "KiB/s.")
 
-                    self.avg_speeds['send'] = (self.avg_speeds['send'] + speed) / 2
-                    logger.debug("Average send speed: " + str(self.avg_speeds['send']) +
+                    self.avg_speeds['send'] = (self.avg_speeds['send'] +
+                                               speed) / 2
+                    logger.debug("Average send speed: " +
+                                 str(self.avg_speeds['send']) +
                                  " KiB/s.")
                     self.last_bytes['send'] = total_bytes_sent
                     self.last_times['send'] = now
 
             except ZeroDivisionError:
-                logger.warning("Sampling to fast, while sampling incoming speed.")
+                logger.warning("Sampling to fast, while sampling incoming.")
 
-            logger.debug(json.dumps({ "receive": str(self.avg_speeds['rcv']) +
+            logger.debug(json.dumps({"receive": str(self.avg_speeds['rcv']) +
                                      " KiB/s.",
                                      "send": str(self.avg_speeds['send']) +
                                      " KiB/s."}))
-            self.write_message(json.dumps({ "receive": str(self.avg_speeds['rcv']) +
-                                           " KiB/s.",
-                                           "send": str(self.avg_speeds['send']) +
-                                           " KiB/s."}))
+            self.write_message(json.dumps(
+                {"receive": "{:8.2f}".format(self.avg_speeds['rcv']) +
+                 " KiB/s.",
+                 "send": "{:8.2f}".format(
+                     self.avg_speeds['send']) +
+                 " KiB/s."}))
 
     def open(self):
-        logger.debug(json.dumps({ "receive": str(self.avg_speeds['rcv']) +
+        logger.debug(json.dumps({"receive": str(self.avg_speeds['rcv']) +
                                  " KiB/s.",
                                  "send": str(self.avg_speeds['send']) +
                                  " KiB/s."}))
-        self.write_message(json.dumps({ "receive": str(self.avg_speeds['rcv']) +
+        self.write_message(json.dumps({"receive": str(self.avg_speeds['rcv']) +
                                        " KiB/s.",
                                        "send": str(self.avg_speeds['send']) +
                                        " KiB/s."}))
@@ -127,11 +132,11 @@ class WebSocketspeedHandler(tornado.websocket.WebSocketHandler):
         self.periodic_callback.start()
 
     def on_message(self, message):
-        logger.debug(json.dumps({ "receive": str(self.avg_speeds['rcv']) +
+        logger.debug(json.dumps({"receive": str(self.avg_speeds['rcv']) +
                                  " KiB/s.",
                                  "send": str(self.avg_speeds['send']) +
                                  " KiB/s."}))
-        self.write_message(json.dumps({ "receive": str(self.avg_speeds['rcv']) +
+        self.write_message(json.dumps({"receive": str(self.avg_speeds['rcv']) +
                                        " KiB/s.",
                                        "send": str(self.avg_speeds['send']) +
                                        " KiB/s."}))

@@ -1,13 +1,39 @@
-2015-12-19  oblivion  <oblivion@linda_lee>
+2018-14-01  oblivion  <oblivion@linda_lee>
 
-	* Rework loggin in the server.
+	* ansible-debian-lighttpd: Set site root directory during installation.
+	* ansible-debian-midoro-kiosk: Set owner of files in kiosk in the home
+	  directory.
+	* ansible-debian-midoro-kiosk: Do not overwrite or delete .ssh int the kiosk
+	  user home directory.
+	* ansible-debian-midoro-kiosk: Sync of kiosk user home directory made
+	  optional.
+	* ansible-debian-midoro-kiosk: Ctrl+Alt+Backspace to kill the X server
+	  made optional.
+	* ansible-serverhud: Split client/server installation to separate files.
+	* ansible-serverhud: Changes for HTML5 client.
+	* ansible-serverhud: Split client/server installation to separate files.
+	* test/full-sys: Changes for HTML5 client.
 
-2015-12-19  oblivion  <oblivion@linda_lee>
+2018-01-01  oblivion  <oblivion@linda_lee>
+
+	* serverhud/ws/speed.py: Use format for speed output.
+
+2017-12-29  oblivion  <oblivion@linda_lee>
+
+	* Add make file rule to create a YAML file with version info.
+    * Add Ansible version requirement to README
+    * /serverhud/ws/__init__.py: More debug logging
+
+2017-12-19  oblivion  <oblivion@linda_lee>
+
+	* Rework logging in the server.
+
+2017-12-19  oblivion  <oblivion@linda_lee>
 
 	* Fix Makefile dependencies
 	* Add more debugging to the server
 
-2015-12-18  oblivion  <oblivion@linda_lee>
+2017-12-18  oblivion  <oblivion@linda_lee>
 
 	* Move client to separate
 	* Remove client from Python package
@@ -15,25 +41,25 @@
     * v5.2
 	* test/full-sys: Use Ansible for provosioning
 
-2015-12-08  oblivion  <oblivion@linda_lee>
+2017-12-08  oblivion  <oblivion@linda_lee>
 
 	* roles/: Add Ansible server hud install role
 	* roles/: Add Ansible lighttpd install role
 	* roles/: Add Ansiblel role to run Midori in kiosk mode
 
-2015-12-06  oblivion  <oblivion@linda_lee>
+2017-12-06  oblivion  <oblivion@linda_lee>
 
 	* serverhud/ws: Origin check is back.
 	* tests/full-sys: Configured for origin check.
 	* tests/full-sys: Update README
 
-2015-12-04  oblivion  <oblivion@linda_lee>
+2017-12-04  oblivion  <oblivion@linda_lee>
 
 	* serverhud/ws/access.py: Better logging and error handling.
 	* serverhud/ws/remote_host.py: Better logging and error handling.
 	* tests/full-sys/Vagrantfile: Stop some provisioning step from running each time.
 
-2015-12-03  oblivion  <oblivion@linda_lee>
+2017-12-03  oblivion  <oblivion@linda_lee>
 
 	* .gitignore: Simplify.
     * build_pip.sh: Script to build a Python package.

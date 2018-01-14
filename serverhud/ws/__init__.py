@@ -61,6 +61,9 @@ def origin_allowed(origin):
     '''
     log = logging.getLogger(__name__)
     host = urlparse(origin).netloc
+    log.debug("Allowed:")
+    for allowed in config.CONFIG['ALLOWED']:
+        log.debug(" - " + allowed)
     if host in config.CONFIG['ALLOWED']:
         log.debug("Allowing: " + origin)
         return(True)
