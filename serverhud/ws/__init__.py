@@ -25,7 +25,7 @@ class WebSocketServicesHandler(tornado.websocket.WebSocketHandler):
         self.logger = logging.getLogger(__name__)
 
     def open(self):
-        self.write_message(json.dumps(ws.config.CONFIG['WS_SERVICES']))
+        self.write_message(json.dumps(config.CONFIG['WS_SERVICES']))
 
     def on_message(self, message):
         self.logger.debug("Sending services message: " +

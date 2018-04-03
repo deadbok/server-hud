@@ -3,7 +3,7 @@
 	* ansible-debian-lighttpd: Set site root directory during installation.
 	* ansible-debian-midoro-kiosk: Set owner of files in kiosk in the home
 	  directory.
-	* ansible-debian-midoro-kiosk: Do not overwrite or delete .ssh int the kiosk
+	* ansible-debian-midoro-kiosk: Do not overwrite or delete .ssh in the kiosk
 	  user home directory.
 	* ansible-debian-midoro-kiosk: Sync of kiosk user home directory made
 	  optional.

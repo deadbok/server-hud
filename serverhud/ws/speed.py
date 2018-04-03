@@ -105,7 +105,7 @@ class WebSocketspeedHandler(tornado.websocket.WebSocketHandler):
                     self.last_times['send'] = now
 
             except ZeroDivisionError:
-                logger.warning("Sampling to fast, while sampling incoming.")
+                logger.warning("Sampling to fast, while sampling speed.")
 
             logger.debug(json.dumps({"receive": str(self.avg_speeds['rcv']) +
                                      " KiB/s.",

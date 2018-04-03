@@ -1,0 +1,213 @@
+/*!
+ * Dashboard
+ * Copyright 2015-2018 Martin Bo Kristensen Grønholdt
+ */
+
+/* apply a natural box layout model to all elements, but allowing components to change */
+
+html {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+	-moz-box-sizing: inherit;
+	-webkit-box-sizing: inherit;
+	box-sizing: inherit;
+}
+
+body {
+	background: black;
+	color: white;
+}
+
+h1 {
+	font-size: 6vh;
+}
+
+h3 {
+	font-size: 3vh;
+}
+
+.header {
+	font-weight: bold;
+	font-size: 2.25vh;
+	border-width: 0;
+	padding: 0.2vh;
+	margin-bottom: 0.2vh;
+	width: 100%;
+}
+
+.footer {
+	background: #000000;
+	font-size: 1.75vh;
+	border-width: 0;
+	width: 100%;
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	z-index: 3;
+	display: block;
+	padding-top: 0.5vh;
+	padding-bottom: 0.5vh;
+	padding-left: 1vh;
+}
+
+.connections {
+	border: 0.25vh solid silver;
+	border-radius: 1em;
+	float: left;
+}
+
+.url {
+	border: 0.25vh solid silver;
+	border-radius: 1em;
+	float: left;
+}
+
+.uptime {
+	border: 0.25vh solid silver;
+	border-radius: 1em;
+	float: left;
+}
+
+.accesses {
+	border: 0.25vh solid silver;
+	border-radius: 1em;
+	float: left;
+}
+
+.web-panel:after {
+	content: "";
+	clear: both;
+	display: block;
+}
+
+.speed {
+	border: 0.25vh solid silver;
+	border-radius: 1em;
+	float: left;
+}
+
+.speed-panel:after {
+	content: "";
+	clear: both;
+	display: block;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.panel-heading {
+	background: #22262B;
+	font-weight: bold;
+	border: 0.25vh solid silver;
+	border-style: none none solid none;
+	padding: 1vh;
+	font-size: 2.60vh;
+	border-top-left-radius: 1em;
+	border-top-right-radius: 1em;
+	text-align: center;
+	margin-bottom: 0.5vh;
+}
+
+.panel-body {
+	padding: 1vh;
+}
+
+.text-layer {
+	z-index: 3;
+	left: 0;
+	top: 0;
+	position: relative;
+}
+
+.graph-layer {
+	z-index: 2;
+	left: 0;
+	top: 0px;
+	position: relative;
+}
+
+.panel-row {
+	display: flex;
+	flex-direction: row;
+}
+
+.high {
+	font-size: 11.6vh;
+	font-weight: bold;
+	/*font-family: sans-serif;*/
+}
+
+.error {
+	color: red;
+}
+
+/* For mobile phones: */
+
+[class*="col-"] {
+	width: 96%;
+	margin: 2%;
+}
+
+/* For screen with a width of 800 or more. */
+
+@media only screen and (min-width: 800px) {
+	.col-1 {
+		width: 8.24666666667%;
+		margin: 0.5%;
+	}
+	.col-2 {
+		width: 16.4933333333%;
+		margin: 0.5%;
+	}
+	.col-3 {
+		width: 24.74%;
+		margin: 0.5%;
+	}
+	.col-4 {
+		width: 32.9866666667%;
+		margin: 0.5%;
+	}
+	.col-5 {
+		width: 41.2333333333%;
+		margin: 0.5%;
+	}
+	.col-6 {
+		width: 49.48%;
+		margin: 0.5%;
+	}
+	.col-7 {
+		width: 57.7266666667%;
+		margin: 0.5%;
+	}
+	.col-8 {
+		width: 65.9733333333;
+		margin: 0.5%;
+	}
+	.col-9 {
+		width: 74.22%;
+		margin: 0.5%;
+	}
+	.col-10 {
+		width: 82.4666666667%;
+		margin: 0.5%;
+	}
+	.col-11 {
+		width: 90,7133333333%;
+		margin: 0.5%;
+	}
+	.col-12 {
+		width: 98.96%;
+		margin: 0.5%;
+	}
+}
+
+a {
+	color: white;
+}
