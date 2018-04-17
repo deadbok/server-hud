@@ -17,7 +17,7 @@ class AccessHandler(FileSystemEventHandler):
     instances = 0
 
     def __init__(self, handler, *args, **kwargs):
-        self.logger = logging(__name__)
+        self.logger = logging.getLogger(__name__)
         self.logger.debug("Creating WebSocket file access handler")
         super(AccessHandler, self).__init__(*args, **kwargs)
         self.handlers = [handler]

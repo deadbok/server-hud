@@ -1,5 +1,6 @@
 2018-04-17  oblivion  <oblivion@linda_lee>
-
+	* Server
+		* Fix logger instantiaion error in access.py
 	* React app
 		* Update app title in index.html
 		* Add modified react-svg-text component to tree
