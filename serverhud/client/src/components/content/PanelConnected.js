@@ -11,10 +11,6 @@ class PanelConnected extends PanelText {
     };
   }
 
-  onSocketOpen() {
-    console.log('Connection established!')
-  }
-
   onSocketData(message) {
     let decoded = JSON.parse(message.data);
     this.setState({text: decoded['connections']});
@@ -24,9 +20,7 @@ class PanelConnected extends PanelText {
 
   componentDidMount() {
     this.socket = new WebSocket('ws://malcolm:5000/ws/connections')
-    this.socket.onopen = () => this.onSocketOpen()
     this.socket.onmessage = (m) => this.onSocketData(m)
-    this.socket.onclose = () => this.onSocketClose()
   }
 
   render() {

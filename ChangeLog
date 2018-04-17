@@ -1,3 +1,11 @@
+2018-04-17  oblivion  <oblivion@linda_lee>
+
+	* React app
+		* Update app title in index.html
+		* Add modified react-svg-text component to tree
+		* Reorganise source
+		* Start documenting and commenting the source code
+
 2018-14-01  oblivion  <oblivion@linda_lee>
 
 	* ansible-debian-lighttpd: Set site root directory during installation.

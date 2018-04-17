@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import ContainerDimensions from 'react-container-dimensions'
 //Headers
-import PageHeader from './header/PageHeader';
-import PanelHeader from './header/PanelHeader';
+import PageHeader from './components/header/PageHeader';
+import PanelHeader from './components/header/PanelHeader';
 //Content
-import PanelConnected from './content/PanelConnected';
-import PanelSpeed from './content/PanelSpeed';
-import PanelText from './content/PanelText';
+import PanelConnected from './components/content/PanelConnected';
+import PanelSpeed from './components/content/PanelSpeed';
+import PanelText from './components/content/PanelText';
 //import logo from './logo.svg';
 import './App.css';
 
