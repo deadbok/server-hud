@@ -22,7 +22,7 @@ class PageHeader extends React.Component {
   }
   render() {
     return <div className="header">
-      <div className="text-center" id="clock">{this.state.title} - {window.location.hostname} - {this.state.date.toLocaleTimeString()}
+      <div className="text-center header" id="clock">{this.state.title} - {window.location.hostname} - {this.state.date.toLocaleTimeString()}
       </div>
     </div>;
   }

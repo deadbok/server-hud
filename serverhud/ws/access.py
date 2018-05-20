@@ -10,7 +10,11 @@ from serverhud import ws
 
 from serverhud.ws import logger
 
+import tornado.ioloop
+from functools import partial
+
 from watchdog.events import FileSystemEventHandler
+
 
 
 class AccessHandler(FileSystemEventHandler):
@@ -31,8 +35,9 @@ class AccessHandler(FileSystemEventHandler):
     def handle(self, data):
         self.logger.debug("(" + str(self.id) + ") Handling: " + str(data))
         for handler in self.handlers:
-            self.logger.debug("(" + str(self.id) + ") Calling handler")
-            handler(data)
+            self.logger.debug("(" + str(self.id) + ") Calling handler: " + str(handler))
+            tornado.ioloop.IOLoop.instance().add_callback(partial(handler, data))
+            #handler(data)
 
     def read_access_log(self):
         # Count number of lines

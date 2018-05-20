@@ -43,6 +43,7 @@ class WebSocketuptimeHandler(tornado.websocket.WebSocketHandler):
                              datetime.fromtimestamp(process.create_time()))
         logger.debug("Up time: " + str(proc_time) + ".")
         self.uptime = str(proc_time).split('.')[0]
+        self.uptime.replace('days ', 'days\n')
 
     def send(self):
         self.update()

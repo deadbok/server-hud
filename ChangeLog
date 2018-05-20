@@ -1,4 +1,23 @@
-2018-04-17  oblivion  <oblivion@linda_lee>
+2018-05-20 oblivion <oblivion@linda_lee>
+	* Server
+		* Remove observer from access and remote_host code as it was crashing
+		  the thread.
+		* Add newline to message.
+	* React app
+		* Update dependencies
+		* Fix CSS to have a layout more like the original HTML version.
+		* Add component to auto fit text.
+		* Add bar graph to the Connected panel.
+		* Add custom axis divisions to the Speed panel.
+		* Add auto fit text to the Text panel.
+		
+
+2018-04-22 oblivion <oblivion@linda_lee>
+	* Server
+		* Replace access handler with periodic timer because of threading issues.
+		* Add newlines to uptime and remote_host.
+
+2018-04-17 oblivion <oblivion@linda_lee>
 	* Server
 		* Fix logger instantiaion error in access.py
 	* React app
@@ -7,124 +26,129 @@
 		* Reorganise source
 		* Start documenting and commenting the source code
 
-2018-14-01  oblivion  <oblivion@linda_lee>
+2018-14-01 oblivion <oblivion@linda_lee>
 
 	* ansible-debian-lighttpd: Set site root directory during installation.
 	* ansible-debian-midoro-kiosk: Set owner of files in kiosk in the home
-	  directory.
-	* ansible-debian-midoro-kiosk: Do not overwrite or delete .ssh in the kiosk
-	  user home directory.
+	directory.
+	* ansible-debian-midoro-kiosk: Do not overwrite or delete `.ssh` in the
+	kiosk user home directory.
 	* ansible-debian-midoro-kiosk: Sync of kiosk user home directory made
-	  optional.
+	optional.
 	* ansible-debian-midoro-kiosk: Ctrl+Alt+Backspace to kill the X server
-	  made optional.
+	made optional.
 	* ansible-serverhud: Split client/server installation to separate files.
 	* ansible-serverhud: Changes for HTML5 client.
 	* ansible-serverhud: Split client/server installation to separate files.
 	* test/full-sys: Changes for HTML5 client.
 
-2018-01-01  oblivion  <oblivion@linda_lee>
+2018-01-01 oblivion <oblivion@linda_lee>
 
 	* serverhud/ws/speed.py: Use format for speed output.
 
-2017-12-29  oblivion  <oblivion@linda_lee>
+2017-12-29 oblivion <oblivion@linda_lee>
 
 	* Add make file rule to create a YAML file with version info.
-    * Add Ansible version requirement to README
+	* Add Ansible version requirement to README
     * /serverhud/ws/__init__.py: More debug logging
 
-2017-12-19  oblivion  <oblivion@linda_lee>
+2017-12-19 oblivion <oblivion@linda_lee>
 
 	* Rework logging in the server.
 
-2017-12-19  oblivion  <oblivion@linda_lee>
+2017-12-19 oblivion <oblivion@linda_lee>
 
 	* Fix Makefile dependencies
 	* Add more debugging to the server
 
-2017-12-18  oblivion  <oblivion@linda_lee>
+2017-12-18 oblivion <oblivion@linda_lee>
 
 	* Move client to separate
 	* Remove client from Python package
 
-    * v5.2
+	* v5.2
 	* test/full-sys: Use Ansible for provosioning
 
-2017-12-08  oblivion  <oblivion@linda_lee>
+2017-12-08 oblivion <oblivion@linda_lee>
 
 	* roles/: Add Ansible server hud install role
 	* roles/: Add Ansible lighttpd install role
 	* roles/: Add Ansiblel role to run Midori in kiosk mode
 
-2017-12-06  oblivion  <oblivion@linda_lee>
+2017-12-06 oblivion <oblivion@linda_lee>
 
 	* serverhud/ws: Origin check is back.
 	* tests/full-sys: Configured for origin check.
 	* tests/full-sys: Update README
 
-2017-12-04  oblivion  <oblivion@linda_lee>
+2017-12-04 oblivion <oblivion@linda_lee>
 
 	* serverhud/ws/access.py: Better logging and error handling.
 	* serverhud/ws/remote_host.py: Better logging and error handling.
 	* tests/full-sys/Vagrantfile: Stop some provisioning step from running each time.
 
-2017-12-03  oblivion  <oblivion@linda_lee>
+2017-12-03 oblivion <oblivion@linda_lee>
 
 	* .gitignore: Simplify.
-    * build_pip.sh: Script to build a Python package.
-    * develop.sh: Script to install Server HUD in development mode.
-    * Makefile: Builds the Python package.
-    * Manifest.in: Added to also install non python files.
-    * README.md: Updated.
-    * README.rst: Description for the Python package.
-    * setup.py: Added with packaging information.
-    * version: Added with package version.
-    * Moved all Python code into serverhud/
-    * Added entry points in scripts/
-    * Added full system test in tests/full-sys
-    * Added systemd service files in systemsd/
+	* build_pip.sh: Script to build a Python package.
+	* develop.sh: Script to install Server HUD in development mode.
+	* Makefile: Builds the Python package.
+	* Manifest.in: Added to also install non python files.
+	* README.md: Updated.
+	* README.rst: Description for the Python package.
+	* setup.py: Added with packaging information.
+	* version: Added with package version.
+	* Moved all Python code into serverhud/
+	* Added entry points in scripts/
+	* Added full system test in tests/full-sys
+	* Added systemd service files in systemsd/
     * Client:
-	   * Get configuration file from environment variable.
-	   * Remove probe code that is now handled by the WebSocker server.
+		* Get configuration file from environment variable.
+		* Remove probe code that is now handled by the WebSocker server.
 
-
-2015-08-13  oblivion  <oblivion@case>
+2015-08-13 oblivion <oblivion@case>
 
 	* app/__init__.py: Logging using flask.
 	* app/views.py: Logging using flask.
 
-2015-08-06  oblivion  <oblivion@case>
+2015-08-06 oblivion <oblivion@case>
 
 	* app/static/css/dashboard.css: Lots of responsive stuff.
-	* app/templates/index.html: Fixed rest url for receive speed.
-								Update remote host name if connections is greater than last run.
-								Added footer.
-								Lots of responsive stuff.
-								REST servers are configured in config.py
-	* config.py: Added SERVICES.
-				 Added ALLOWED.
-				 Added HOSTS.
-	* app/views.py: Added dynamic building of URLs.
-				    Reverted speed functions to get local values.
-				    Added CORS to all the REST.
-				    Count connections on all ports if asked.
-				    Return IP is name resolution fails.
-				    Adding http:// to ALLOWED.
+	* app/templates/index.html:
+		* Fixed rest url for receive speed.
+		* Update remote host name if connections is greater than last run.
+		* Added footer.
+		* Lots of responsive stuff.
+		* REST servers are configured in config.py
+	* config.py:
+		* Added SERVICES. 
+		* Added ALLOWED.
+		* Added HOSTS.
+	* app/views.py:
+		* Added dynamic building of URLs.
+		* Reverted speed functions to get local values.
+		* Added CORS to all the REST.
+		* Count connections on all ports if asked.
+		* Return IP is name resolution fails.
+		* Adding http:// to ALLOWED.
 
-2015-08-05  oblivion  <oblivion@case>
+2015-08-05 oblivion <oblivion@case>
 
 	* app/templates/index.html: Update remote host every minute, if there's an error.
 
-2015-08-03  oblivion  <oblivion@case>
+2015-08-03 oblivion <oblivion@case>
 
 	* app/__init__.py: Added logging.
-	* app/templates/index.html: Spelling.
-								Added configurable port.
-								Everything is RESTful.
-	* config.py: Added PORT.
-				 Added DEBUG.
-	* app/views.py: PEP8 fixes.
-					Everything is RESTful.
-					Added logging.
-					Get speed from REST on firewall.
-					Resolve host name.
+	* app/templates/index.html:
+		* Spelling.
+		* Added configurable port.
+		* Everything is RESTful.
+	* config.py:
+		* Added PORT.
+		* Added DEBUG.
+	* app/views.py:
+		* PEP8 fixes.
+		* Everything is RESTful.
+		* Added logging.
+		* Get speed from REST on firewall.
+		* Resolve host name.
