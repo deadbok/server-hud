@@ -26,7 +26,6 @@ class PanelUptime extends React.Component {
   }
 
   render() {
-    const style = {fontSize: '4.5vh'};
     return <PanelText
       title={this.props.title}
       lines={this.state.lines}

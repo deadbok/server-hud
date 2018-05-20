@@ -46,15 +46,7 @@ class AutoFitText extends React.Component {
 
         let y = this.props.y;
         let x = this.props.x;
-        let scaleX = this.props.width / (bounds.width * 1.25);
-        let scaleY = this.props.height / bounds.height;
-
-        let scale = 0;
-        if (scaleX < scaleY) {
-            scale = scaleX;
-        } else {
-            scale = scaleY;
-        }
+        let scale = Math.min(this.props.width / bounds.width, this.props.height / bounds.height);
 
         if (this.props.maxScale > 0) {
             if (scale > this.props.maxScale) {

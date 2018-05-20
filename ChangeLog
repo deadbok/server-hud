@@ -1,7 +1,7 @@
 2018-05-20 oblivion <oblivion@linda_lee>
 	* Server
 		* Remove observer from access and remote_host code as it was crashing
-		  the thread.
+		the thread.
 		* Add newline to message.
 	* React app
 		* Update dependencies
@@ -10,7 +10,9 @@
 		* Add bar graph to the Connected panel.
 		* Add custom axis divisions to the Speed panel.
 		* Add auto fit text to the Text panel.
-		
+		* Better scaling algorithm for the PanelText component.
+		* Simplify scaling algorithm in the AutoText component.
+		* Clean unused imports and variable.
 
 2018-04-22 oblivion <oblivion@linda_lee>
 	* Server
@@ -19,7 +21,7 @@
 
 2018-04-17 oblivion <oblivion@linda_lee>
 	* Server
-		* Fix logger instantiaion error in access.py
+		* Fix logger instantiation error in access.py
 	* React app
 		* Update app title in index.html
 		* Add modified react-svg-text component to tree
@@ -67,7 +69,7 @@
 	* Remove client from Python package
 
 	* v5.2
-	* test/full-sys: Use Ansible for provosioning
+	* test/full-sys: Use Ansible for provisioning
 
 2017-12-08 oblivion <oblivion@linda_lee>
 
@@ -101,10 +103,10 @@
 	* Moved all Python code into serverhud/
 	* Added entry points in scripts/
 	* Added full system test in tests/full-sys
-	* Added systemd service files in systemsd/
+	* Added systemd service files in systemd/
     * Client:
 		* Get configuration file from environment variable.
-		* Remove probe code that is now handled by the WebSocker server.
+		* Remove probe code that is now handled by the WebSocket server.
 
 2015-08-13 oblivion <oblivion@case>
 

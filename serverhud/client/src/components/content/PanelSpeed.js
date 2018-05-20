@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Text from '../react-svg-text/src/Text';
 import AutoFitText from '../base/AutoFitText';
 import PanelHeader from '../header/PanelHeader';
 import PanelText from './PanelText';
 
 /**
- * React component to draw transfer speed widgets with a linegraph in the
+ * React component to draw transfer speed widgets with a line-graph in the
  * background.
  *
- * @todo Precalculate
- * @todo Make SVG component fit container automaticly.
- * @todo Make sure everthing scales gracefully at various resolutions.
+ * @todo Pre-calculate
+ * @todo Make SVG component fit container automatically.
+ * @todo Make sure everything scales gracefully at various resolutions.
  *
  * @author Martin Grønholdt.
  */
@@ -25,7 +24,7 @@ class PanelSpeed extends PanelText {
     constructor(props) {
         super(props);
         this.xPadding = 20;
-        this.yPadding = 14;
+        this.yPadding = 10;
         this.state = {
             class: 'col-' + props.size + ' fleft panel-border',
             direction: props.direction,
@@ -41,13 +40,13 @@ class PanelSpeed extends PanelText {
             svgHeight: props.svgHeight,
             svgWidth: props.svgWidth
         };
-        // Counter to keep track of sampls for the graph.
+        // Counter to keep track of samples for the graph.
         this.i = 0;
         // Number of samples in current data.
         this.samples = 0;
         // Maximum Y value encountered in the data.
         this.maxY = 0;
-        // Avarage across websocket data.
+        // Average across websocket data.
         this.avg = 0;
 
         if (this.props.svgHeight === -1)
@@ -60,7 +59,7 @@ class PanelSpeed extends PanelText {
     }
 
     /**
-     * Parse data recieved on the websocket.
+     * Parse data received on the websocket.
      *
      * @param {message} message
      */
@@ -78,7 +77,7 @@ class PanelSpeed extends PanelText {
         // Check if we have sampled enough that we've reached the next point in the
         // graph.
         if (this.i > this.state.graphWait) {
-            /* Create a copy of the data array. If the array is fully pouplated
+            /* Create a copy of the data array. If the array is fully populated
              * remove the first entry and add the new one at the end. If the
              * array is not fully populated add the new data to the end */
             let arrayvar = this.state.data;
@@ -153,7 +152,7 @@ class PanelSpeed extends PanelText {
      * @memberof PanelSpeed
      */
     getMinX() {
-        // Run through the dataset and get the minumim value.
+        // Run through the dataset and get the minimum value.
         if (this.state.data[0] !== undefined) {
             let ret = this.state.data[0]['x'];
             this
@@ -210,7 +209,7 @@ class PanelSpeed extends PanelText {
     getMaxY() {
         // If the dataset is empty, return 0.
         if (this.state.data[0] !== undefined) {
-            /* Get the maximum y value in the current dataset diveded by ten to
+            /* Get the maximum y value in the current dataset divided by ten to
              * loose precision. */
             let ret = this.state.data[0]['y'];
             this
@@ -222,7 +221,7 @@ class PanelSpeed extends PanelText {
             /* Since we only want the y axis to be precise to the nearest larger
              * tens, round up the number before multiplying by 10 */
             ret = Math.ceil(ret) * 10;
-            // Save value if it is the lergest yet.
+            // Save value if it is the largest yet.
             if (ret > this.maxY) {
                 this.maxY = ret
             }
@@ -271,7 +270,7 @@ class PanelSpeed extends PanelText {
      * @memberof PanelSpeed
      */
     getStringBounds(str, style) {
-        // Create the SVG, and a text elemnts.
+        // Create the SVG, and a text elements.
         let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         let textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         textElement.setAttribute('id', '__react_svg_speed_text_measurement_id');
@@ -527,16 +526,12 @@ class PanelSpeed extends PanelText {
      */
     makeAxisValue() {
         // Figure out the size of a zero character.
-        let labelBounds = this.getStringBounds('0', {});
         let x = this.state.xPadding - this.state.xPadding / 8;
         let y = 0;
 
         // Y labels.
         let ret = [];
-        let maxLabelBounds = this.getStringBounds('0', {}) * this
-            .maxY
-            .toString()
-            .length;
+
         for (let i = 1; i < this.props.yAxisDivisions + 1; i++) {
             y = this.state.graphHeight - ((this.state.graphHeight / this.props.yAxisDivisions) * i) + (this.state.graphHeight / (this.props.yAxisDivisions * 3));
             if (this.maxY === 0) {
@@ -551,8 +546,6 @@ class PanelSpeed extends PanelText {
                     fill={this.props.textColor}
                     text={"0"}/>);
             } else {
-                labelBounds = this.getStringBounds(((this.maxY / this.props.yAxisDivisions) * i).toString(), {});
-                let widthScale = labelBounds.width / maxLabelBounds.width
                 ret.push(<AutoFitText
                     y={y}
                     x={x}
@@ -577,26 +570,26 @@ class PanelSpeed extends PanelText {
 
         for (let i = 0; i < this.props.xAxisDivisions; i++) {
             x = this.state.xPadding + ((this.state.graphWidth / this.props.xAxisDivisions) * (i + 1)) - 4;
-            if (this.state.data.length < 10) {
+            if (this.state.data.length < this.props.xAxisDivisions) {
                 ret.push(<AutoFitText
-                    y={y}
+                    y={y + 1}
                     x={x}
                     key={i + 20}
                     textAnchor={"end"}
                     width={this.state.graphWidth / this.props.xAxisDivisions}
-                    height={this.state.yPadding * 0.9}
+                    height={this.state.yPadding * 0.8}
                     stroke={this.props.textColor}
                     fill={this.props.textColor}
                     text={'00:00'}/>);
             } else {
                 j = Math.floor((this.state.data.length - 1) / this.props.xAxisDivisions * i);
                 ret.push(<AutoFitText
-                    y={y}
+                    y={y + 1}
                     x={x}
                     key={i + 20}
                     textAnchor={"end"}
                     width={this.state.graphWidth / this.props.xAxisDivisions}
-                    height={this.state.yPadding * 0.9}
+                    height={this.state.yPadding * 0.8}
                     stroke={this.props.textColor}
                     fill={this.props.textColor}
                     text={this
@@ -687,13 +680,13 @@ PanelSpeed.propTypes = {
     pathLine: PropTypes.string,
     /** Text color */
     textColor: PropTypes.string,
-    /** Base line witdh of axes, and grid. The graph line is twice this width */
+    /** Base line width of axes, and grid. The graph line is twice this width */
     strokeWidth: PropTypes.number,
     /** Number of sample points used to draw the graph */
     graphSamples: PropTypes.number,
-    /** Number of valus to skip between sampling for the graph */
+    /** Number of values to skip between sampling for the graph */
     graphWait: PropTypes.number,
-    /** Trafic direction to show */
+    /** Traffic direction to show */
     direction: PropTypes.oneOf(['receive', 'send']),
     /** Unit label drawn by the X axis */
     xUnitLabel: PropTypes.string,

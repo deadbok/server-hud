@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import PanelHeader from '../header/PanelHeader';
 import AutoFitText from '../base/AutoFitText';
-import PanelText from './PanelText';
 
 class PanelConnected extends React.Component {
   constructor(props) {
@@ -52,7 +51,7 @@ class PanelConnected extends React.Component {
       this.setState({maxBB: maxBB});
 
       let style = window.getComputedStyle(this.panelBody, null);
-      let paddingX = parseFloat(style.getPropertyValue('padding-left')) + parseFloat(style.getPropertyValue('padding-right'));
+      //let paddingX = parseFloat(style.getPropertyValue('padding-left')) + parseFloat(style.getPropertyValue('padding-right'));
       let paddingY = parseFloat(style.getPropertyValue('padding-top')) + parseFloat(style.getPropertyValue('padding-bottom'));
 
       let width = maxBB.width;

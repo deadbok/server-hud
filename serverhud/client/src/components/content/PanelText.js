@@ -44,38 +44,27 @@ class PanelText extends React.Component {
    * @return div with component.
    * @memberof PanelText
    */
-  // return <p className="high" key={i} style={this.fixWidth(line)}>{line}</p>; },
-  // this)
   render() {
-    //Render each line as a seperate paragraph
-    let boundingBoxes = [];
+    //Render each line as a separate paragraph
+    let scalingValues = [];
 
-    let scale = 9999;
-    if (this.scale === 1) {
-      if (this.state.maxBB !== undefined) {
-        this
-          .props
-          .lines
-          .forEach(line => {
-            const currentBB = this.measure(line.trim(), 1)
+    if (this.state.maxBB !== undefined) {
+      this
+        .props
+        .lines
+        .forEach(line => {
+          let scale = 0.1;
+          let currentBB = this.measure(line.trim(), scale);
 
-            scale = Math.min(this.state.maxBB.width / currentBB.width, this.state.maxBB.height / currentBB.height, scale);
-            boundingBoxes.push(currentBB)
-          });
-      }
+          while (((this.state.maxBB.width * 0.75) > currentBB.width) && ((this.state.maxBB.height / this.props.lines.length) > currentBB.height)) {
+            scale += 2;
+            currentBB = this.measure(line.trim(), scale);
+          }
+          scale -= 2;
+
+          scalingValues.push(scale)
+        });
     }
-    if (scale === 9999) {
-      scale = 1;
-    }
-    scale = scale / this.props.lines.length;
-
-    scale = scale + 'vh';
-    /*transform: "matrix(" + scale + ", 0, 0, " + scale + ", " + originX + ", " + originY + ")"*/
-    let style = {
-      fontSize: scale,
-      margin: 0,
-      textAlign: 'center'
-    };
 
     return <div className={this.state.class}>
       <PanelHeader title={this.props.title}/>
@@ -88,14 +77,12 @@ class PanelText extends React.Component {
           .props
           .lines
           .map(function (line, i,) {
-            let width = 1;
-            let originX = 1;
-            let originY = 1;
 
-            if (this.state.maxBB !== undefined) {
-              originX = ((this.state.maxBB.width - boundingBoxes[i].width) / 2) * scale;
-              originY = (boundingBoxes[i].height * scale * i);
-            }
+            let style = {
+              fontSize: scalingValues[i] + 'vh',
+              margin: 0,
+              textAlign: 'center'
+            };
 
             return <h3 key={i} style={style}>{line.trim()}</h3>;
           }, this)}
