@@ -1,3 +1,9 @@
+2018-05-27 oblivion <oblivion@linda_lee>
+	* Ansble
+		* Use groups in the install playbook.
+	* React app
+		* Replace current HTML5 client.
+
 2018-05-20 oblivion <oblivion@linda_lee>
 	* Server
 		* Remove observer from access and remote_host code as it was crashing
