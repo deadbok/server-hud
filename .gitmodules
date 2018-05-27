@@ -10,6 +10,3 @@
 [submodule "serverhud/app"]
 	path = serverhud/app
 	url = https://github.com/deadbok/serverhud-client
-[submodule "serverhud/client/src/components/react-svg-text"]
-	path = serverhud/client/src/components/react-svg-text
-	url = https://github.com/deadbok/react-svg-text

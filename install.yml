@@ -1,14 +1,11 @@
 ---
-- hosts: ibook
+- hosts: client
   roles:
     - ansible-debian-lighttpd
     - ansible-serverhud
     - ansible-debian-midori-kiosk
 
-- hosts: webserver
+- hosts: server
   roles:
     - ansible-serverhud
 
-- hosts: malcolm
-  roles:
-    - ansible-serverhud
